@@ -1,7 +1,9 @@
-var uiPanel = require("uiPanel");
-cc.Class({
-    extends: uiPanel,
 
+var uiPanel = require("uiPanel");
+
+cc.Class({
+
+    extends: uiPanel,
     properties: {
         ranksView: {
             default: null,
@@ -13,7 +15,7 @@ cc.Class({
         this._super();
         console.log(this.nodeDict);
         console.log(this.nodeDict["rankTitle"]);
-        this.nodeDict["rankTitle"].getComponent(cc.Label).string = "rank : " + UIFunc.uiList.length;
+        this.nodeDict["rankTitle"].getComponent(cc.Label).string = "rank : " + uiFunc.uiList.length;
 
     },
 

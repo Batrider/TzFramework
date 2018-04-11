@@ -1,17 +1,23 @@
-window.UIFunc = {
+/*
+    create by hao.c 2018/04/10
+
+    desc: 游戏显示相关操作逻辑
+ */
+
+window.uiFunc = {
     uiList: [],
     cacheUIList: []
 };
 
-UIFunc.openUI = function(uiName, callBack) {
+uiFunc.openUI = function(uiName, callBack) {
     // 缓存--
-    for (var i = 0; i < UIFunc.cacheUIList.length; i++) {
-        var temp = UIFunc.cacheUIList[i];
+    for (var i = 0; i < uiFunc.cacheUIList.length; i++) {
+        var temp = uiFunc.cacheUIList[i];
         if (temp && temp.name === uiName) {
             temp.active = true;
             temp.parent = cc.Canvas.instance.node;
-            UIFunc.uiList.push(temp)
-            delete UIFunc.cacheUIList[i];
+            uiFunc.uiList.push(temp)
+            delete uiFunc.cacheUIList[i];
             if (callBack) {
                 callBack(temp);
             }
@@ -31,7 +37,7 @@ UIFunc.openUI = function(uiName, callBack) {
 
         var temp = cc.instantiate(prefab);
         temp.parent = cc.Canvas.instance.node;
-        UIFunc.uiList.push(temp)
+        uiFunc.uiList.push(temp)
         //todo 动画--
         if (callBack) {
             callBack(temp);
@@ -39,14 +45,14 @@ UIFunc.openUI = function(uiName, callBack) {
     });
 };
 
-UIFunc.closeUI = function(uiName, callBack) {
-    for (var i = UIFunc.uiList.length - 1; i >= 0; i--) {
-        var temp = UIFunc.uiList[i];
+uiFunc.closeUI = function(uiName, callBack) {
+    for (var i = uiFunc.uiList.length - 1; i >= 0; i--) {
+        var temp = uiFunc.uiList[i];
         if (temp && temp.name === uiName) {
             temp.active = false;
             temp.removeFromParent(true);
-            UIFunc.cacheUIList.push(temp);
-            delete UIFunc.uiList[i];
+            uiFunc.cacheUIList.push(temp);
+            delete uiFunc.uiList[i];
             //todo 动画--
             if (callBack) {
                 callBack();
