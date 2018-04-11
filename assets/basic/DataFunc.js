@@ -13,7 +13,8 @@ window.dataFunc = {
     tableComment: {},
     CELL_DELIMITERS: [",", ";", "\t", "|", "^"],
     LINE_DELIMITERS: ["\r\n", "\r", "\n"],
-    // ------
+    // 动画--
+    uiPanelAnimationClips: {}
 };
 
 dataFunc.getTable = function(tableName) {
@@ -69,8 +70,20 @@ dataFunc.queryAll = function(tableName, key, value) {
     return ret;
 };
 
-dataFunc.loadConfig = function(progressCb, callback) {
+dataFunc.loadConfigs = function(progressCb, callback) {
 
+    // 加载动画
+    cc.loader.loadResDir("panelAnimClips", cc.AnimationClip, function(err, clips) {
+        if (err) {
+            cc.error(err.message || err);
+            return;
+        }
+        for (var i = 0; i < clips.length; i++) {
+            dataFunc.uiPanelAnimationClips[clips[i].name] = clips[i];
+        }
+    });
+
+    // 加载数据表
     var currentLoad = 0;
     dataFunc.arrTables.forEach(function(tableName, index) {
         cc.loader.loadRes("data/" + tableName, function(err, content) {

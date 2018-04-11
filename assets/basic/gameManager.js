@@ -35,7 +35,7 @@ cc.Class({
 
     start () {
 
-        dataFunc.loadConfig();
+        dataFunc.loadConfigs();
         uiFunc.openUI("uiRankPanel",function(obj) {
             var panel = obj.getComponent("uiRankPanel");
             if(panel){

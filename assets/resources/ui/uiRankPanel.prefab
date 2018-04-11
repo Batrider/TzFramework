@@ -32,13 +32,10 @@
       },
       {
         "__id__": 24
-      },
-      {
-        "__id__": 25
       }
     ],
     "_prefab": {
-      "__id__": 26
+      "__id__": 25
     },
     "_id": "",
     "_opacity": 255,
@@ -717,29 +714,11 @@
       "__id__": 1
     },
     "_enabled": true,
-    "showAnimation": 3,
+    "showAnimation": 1,
     "hideAnimation": 0,
     "ranksView": {
       "__id__": 20
     }
-  },
-  {
-    "__type__": "cc.Animation",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "_defaultClip": {
-      "__uuid__": "413499f2-1e7d-4b10-9122-82840eacbc64"
-    },
-    "_clips": [
-      {
-        "__uuid__": "413499f2-1e7d-4b10-9122-82840eacbc64"
-      }
-    ],
-    "playOnLoad": false
   },
   {
     "__type__": "cc.Widget",

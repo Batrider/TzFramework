@@ -1,9 +1,5 @@
-
-
 var PanelAnimation = cc.Enum({
     None: -1,
-    Scale: -1,
-    Alpha: -1,
     ScaleAndAlpha: -1
 });
 
@@ -41,6 +37,15 @@ cc.Class({
             }
         }.bind(this);
         linkWidget(this.node, this.nodeDict);
+
+        // 添加动画--
+        if (!this.showAnimation || !this.hideAnimation) {
+            this.anim = this.getComponent(cc.Animation);
+            if (!this.anim) {
+                this.anim = this.addComponent(cc.Animation);
+            }
+            this.anim.on('finished', this.showCompleted, this);
+        }
     },
 
     show: function() {
@@ -48,9 +53,13 @@ cc.Class({
             this.node.active = true;
         } else {
             var clipName = PanelAnimation[this.showAnimation];
-            var anim = this.getComponent(cc.Animation);
-            anim.play(clipName);
+            this.anim.addClip(dataFunc.uiPanelAnimationClips[clipName]);
+            this.anim.play(clipName);
         }
+    },
+
+    showCompleted: function() {
+        console.log(this.node.name + "动画播放完毕～");
     },
 
     hide: function() {
@@ -58,8 +67,14 @@ cc.Class({
             this.node.active = false;
         } else {
             var clipName = PanelAnimation[this.hideAnimation];
-            var anim = this.getComponent(cc.Animation);
-            anim.play(clipName);
+            this.anim.addClip(dataFunc.uiPanelAnimationClips[clipName]);
+            this.anim.play(clipName);
+        }
+    },
+
+    onDestroy:function() {
+        if(this.anim){
+            this.anim.off('finished', this.showCompleted, this);
         }
     },
 });
