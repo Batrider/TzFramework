@@ -1,17 +1,27 @@
-// Learn cc.Class:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/class.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/class.html
-// Learn Attribute:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
+
+
+var PanelAnimation = cc.Enum({
+    None: -1,
+    Scale: -1,
+    Alpha: -1,
+    ScaleAndAlpha: -1
+});
 
 cc.Class({
     extends: cc.Component,
+    properties: {
+        showAnimation: {
+            default: PanelAnimation.None,
+            type: PanelAnimation
+        },
+        hideAnimation: {
+            default: PanelAnimation.None,
+            type: PanelAnimation
+        }
+    },
 
     onLoad: function() {
+        // node load --
         this.nodeDict = {};
 
         var linkWidget = function(self, nodeDict) {
@@ -30,15 +40,26 @@ cc.Class({
                 }
             }
         }.bind(this);
-
         linkWidget(this.node, this.nodeDict);
     },
 
-    show: function(/* arguments */) {
-        this.node.active = true;
+    show: function() {
+        if (this.showAnimation === PanelAnimation.None) {
+            this.node.active = true;
+        } else {
+            var clipName = PanelAnimation[this.showAnimation];
+            var anim = this.getComponent(cc.Animation);
+            anim.play(clipName);
+        }
     },
 
     hide: function() {
-        this.node.active = false;
+        if (this.hideAnimation === PanelAnimation.None) {
+            this.node.active = false;
+        } else {
+            var clipName = PanelAnimation[this.hideAnimation];
+            var anim = this.getComponent(cc.Animation);
+            anim.play(clipName);
+        }
     },
 });

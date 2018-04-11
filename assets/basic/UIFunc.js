@@ -18,10 +18,12 @@ uiFunc.openUI = function(uiName, callBack) {
             temp.parent = cc.Canvas.instance.node;
             uiFunc.uiList.push(temp)
             delete uiFunc.cacheUIList[i];
-            if (callBack) {
-                callBack(temp);
+
+            var panel = temp.getComponent("uiPanel");
+            if(panel){
+                panel.show();
             }
-            //todo 动画--
+
             if (callBack) {
                 callBack(temp);
             }
@@ -38,7 +40,12 @@ uiFunc.openUI = function(uiName, callBack) {
         var temp = cc.instantiate(prefab);
         temp.parent = cc.Canvas.instance.node;
         uiFunc.uiList.push(temp)
-        //todo 动画--
+
+        var panel = temp.getComponent("uiPanel");
+        if(panel){
+            panel.show();
+        }
+
         if (callBack) {
             callBack(temp);
         }
@@ -53,11 +60,25 @@ uiFunc.closeUI = function(uiName, callBack) {
             temp.removeFromParent(true);
             uiFunc.cacheUIList.push(temp);
             delete uiFunc.uiList[i];
-            //todo 动画--
+
+            var panel = temp.getComponent("uiPanel");
+            if(panel){
+                panel.hide();
+            }
+
             if (callBack) {
                 callBack();
             }
             return;
+        }
+    }
+}
+
+uiFunc.findUI = function(uiName) {
+    for (var i = uiFunc.uiList.length - 1; i >= 0; i--) {
+        var temp = uiFunc.uiList[i];
+        if (temp && temp.name === uiName) {
+            return temp;
         }
     }
 }
