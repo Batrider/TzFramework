@@ -31,7 +31,7 @@ cc.Class({
                     }
                     nodeDict[nodeName] = children[i];
                     if (children[i].childrenCount > 0) {
-                        linkWidget(children[i], nodeDict[nodeName]);
+                        linkWidget(children[i], nodeDict);
                     }
                 }
             }
