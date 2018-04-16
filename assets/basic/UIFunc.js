@@ -17,16 +17,18 @@ uiFunc.openUI = function(uiName, callBack) {
             temp.active = true;
             temp.parent = cc.Canvas.instance.node;
             uiFunc.uiList.push(temp)
-            delete uiFunc.cacheUIList[i];
+            uiFunc.cacheUIList.splice(i, 1);
 
             var panel = temp.getComponent("uiPanel");
-            if(panel){
+            if (panel) {
                 panel.show();
             }
 
+            // event--
             if (callBack) {
                 callBack(temp);
             }
+            clientEvent.dispatch(clientEvent.eventType.openUI);
             return;
         }
     }
@@ -42,13 +44,15 @@ uiFunc.openUI = function(uiName, callBack) {
         uiFunc.uiList.push(temp)
 
         var panel = temp.getComponent("uiPanel");
-        if(panel){
+        if (panel) {
             panel.show();
         }
 
+        // event--
         if (callBack) {
             callBack(temp);
         }
+        clientEvent.dispatch(clientEvent.eventType.openUI);
     });
 };
 
@@ -59,13 +63,14 @@ uiFunc.closeUI = function(uiName, callBack) {
             temp.active = false;
             temp.removeFromParent(true);
             uiFunc.cacheUIList.push(temp);
-            delete uiFunc.uiList[i];
+            uiFunc.uiList.splice(i, 1);
 
             var panel = temp.getComponent("uiPanel");
-            if(panel){
+            if (panel) {
                 panel.hide();
             }
 
+            clientEvent.dispatch(clientEvent.eventType.closeUI);
             if (callBack) {
                 callBack();
             }

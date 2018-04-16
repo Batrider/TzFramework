@@ -31,17 +31,14 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
-
-    start () {
-
+    onLoad() {
+        clientEvent.init();
         dataFunc.loadConfigs();
-        uiFunc.openUI("uiRankPanel",function(obj) {
-            var panel = obj.getComponent("uiRankPanel");
-            if(panel){
-                panel.setData();
-            }
-        });
+        uiFunc.openUI("uiMaskLayout");
+    },
+
+    start() {
+
 
     },
 });
