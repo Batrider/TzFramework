@@ -10,46 +10,60 @@ cc.Class({
     },
 
     uiOperateCallBack: function() {
-        var curShowUI = uiFunc.uiList[uiFunc.uiList.length - 1];
-        if (!curShowUI || curShowUI === this.node) {
-            console.log("current show ui is null!");
+
+        //最后一个需要使用mask的panel
+        var lastMaskIndex = -1;
+        for (var i = uiFunc.uiList.length - 1; i >= 0; i--) {
+            var ui = uiFunc.uiList[i];
+            var panel = ui.getComponent("uiPanel");
+            if (panel && panel.isUseMask) {
+                lastMaskIndex = i;
+                break;
+            }
+        }
+        if (lastMaskIndex >= 0) {
+            this.node.active = true;
+            for (var j = lastMaskIndex; j < uiFunc.uiList.length; j++) {
+                var targetUI = uiFunc.uiList[j];
+                if (targetUI) {
+                    this.node.setSiblingIndex(Number.MAX_SAFE_INTEGER);
+                    targetUI.setSiblingIndex(Number.MAX_SAFE_INTEGER);
+                } else {
+                    console.log("current show ui is null!");
+                }
+            }
+        } else {
             this.node.active = false;
             return;
-        }
-        else {
-            this.node.active = true;
-        }
-
-        var uiTargetPanel = curShowUI.getComponent("uiPanel");
-        if (!uiTargetPanel) {
-            console.log("target uiPanel no exist!");
-            return;
-        }
-        if (uiTargetPanel.isUseMask) {
-            this.node.setSiblingIndex(Number.MAX_SAFE_INTEGER);
-            uiTargetPanel.node.setSiblingIndex(Number.MAX_SAFE_INTEGER);
         }
     },
 
     refresh: function() {
 
-        var curShowUI = uiFunc.uiList[uiFunc.uiList.length - 1];
-        if (!curShowUI) {
-            console.warn("current show ui is null!");
+        //最后一个需要使用mask的panel
+        var lastMaskIndex = -1;
+        for (var i = uiFunc.uiList.length - 1; i >= 0; i--) {
+            var ui = uiFunc.uiList[i];
+            var panel = ui.getComponent("uiPanel");
+            if (panel.isUseMask) {
+                lastMaskIndex = i;
+                break;
+            }
+        }
+        if (lastMaskIndex >= 0) {
+            this.node.active = true;
+            for (var j = lastMaskIndex; j < uiFunc.uiList.length; j++) {
+                var targetUI = uiFunc.uiList[j];
+                if (targetUI) {
+                    this.node.setSiblingIndex(Number.MAX_SAFE_INTEGER);
+                    targetUI.setSiblingIndex(Number.MAX_SAFE_INTEGER);
+                } else {
+                    console.log("current show ui is null!");
+                }
+            }
+        } else {
             this.node.active = false;
             return;
-        }
-        else {
-            this.node.active = true;
-        }
-        var uiTargetPanel = curShowUI.getComponent("uiPanel");
-        if (!uiTargetPanel) {
-            console.warn("target uiPanel no exist!");
-            return;
-        }
-        if (uiTargetPanel.isUseMask) {
-            this.node.setSiblingIndex(Number.MAX_SAFE_INTEGER);
-            uiTargetPanel.node.setSiblingIndex(Number.MAX_SAFE_INTEGER);
         }
     },
 

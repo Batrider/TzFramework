@@ -1,6 +1,6 @@
-
+var uiPanel = require("uiPanel");
 cc.Class({
-    extends: cc.Component,
+    extends: uiPanel,
 
     properties: {
     },
