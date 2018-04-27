@@ -5,8 +5,8 @@ cc.Class({
         clientEvent.init();
         dataFunc.loadConfigs();
 
-        uiFunc.openUI("uiGameStartPanel", function(panel) {
-            panel.getComponent("uiGameStartPanel").init();
+        uiFunc.openUI("uiFailPanel", function(panel) {
+            // panel.getComponent("uiGameStartPanel").init();
         }.bind(this));
     },
 
