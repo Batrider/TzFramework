@@ -1,0 +1,165 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "rightEffect",
+  "_objFlags": 0,
+  "_rawFiles": null,
+  "_duration": 0.3333333333333333,
+  "sample": 30,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "paths": {
+      "star": {
+        "props": {
+          "opacity": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.3333333333333333,
+              "value": 255
+            }
+          ],
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                55,
+                1
+              ]
+            },
+            {
+              "frame": 0.3333333333333333,
+              "value": [
+                162,
+                150
+              ]
+            }
+          ]
+        }
+      },
+      "star02": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                5,
+                13
+              ]
+            },
+            {
+              "frame": 0.3333333333333333,
+              "value": [
+                9,
+                198
+              ]
+            }
+          ],
+          "opacity": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.3333333333333333,
+              "value": 200
+            }
+          ]
+        }
+      },
+      "star03": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                -110,
+                17
+              ]
+            },
+            {
+              "frame": 0.3333333333333333,
+              "value": [
+                -238,
+                129
+              ]
+            }
+          ],
+          "opacity": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.3333333333333333,
+              "value": 255
+            }
+          ]
+        }
+      },
+      "star04": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                -85,
+                1
+              ]
+            },
+            {
+              "frame": 0.3333333333333333,
+              "value": [
+                -172,
+                -114
+              ]
+            }
+          ],
+          "opacity": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.3333333333333333,
+              "value": 150
+            }
+          ]
+        }
+      },
+      "star05": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                117,
+                -12
+              ]
+            },
+            {
+              "frame": 0.3333333333333333,
+              "value": [
+                195,
+                -152
+              ]
+            }
+          ],
+          "opacity": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.3333333333333333,
+              "value": 255
+            }
+          ]
+        }
+      }
+    }
+  },
+  "events": []
+}

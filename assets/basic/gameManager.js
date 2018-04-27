@@ -5,8 +5,8 @@ cc.Class({
         clientEvent.init();
         dataFunc.loadConfigs();
 
-        uiFunc.openUI("uiHandPanel", function(panel) {
-            panel.getComponent("uiHandPanel").init({position: cc.p(100, 100)});
+        uiFunc.openUI("uiRigntEffectPanel", function(panel) {
+            panel.getComponent("uiRigntEffectPanel").init();
         }.bind(this));
     },
 
