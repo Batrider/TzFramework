@@ -33,7 +33,11 @@ oneToMultiListener.dispatch = function(eventName, data) {
         var target = handlerList[i].target;
         if (handler) {
             try {
-                handler.call(target, data);
+                if (target) {
+                    handler.call(target, data);
+                } else {
+                    handler(data);
+                }
             } catch (e) {
                 console.error(e);
             }
