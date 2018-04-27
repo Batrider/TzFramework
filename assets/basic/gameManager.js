@@ -4,9 +4,14 @@ cc.Class({
     onLoad() {
         clientEvent.init();
         dataFunc.loadConfigs();
-        uiFunc.openUI("uiMaskLayout");
-
-
+        var obj = {
+            labelString: '234',
+            callback: this.cb.bind(this),
+            callBackParam: 'woshiCB'
+        };
+        uiFunc.openUI("uiIndicatePanel", function(panel) {
+            panel.getComponent("uiIndicatePanel").init(obj);
+        }.bind(this));
     },
 
     networkExample: function() {
@@ -40,5 +45,9 @@ cc.Class({
             console.log(("On New User"));
             console.log(data);
         };
+    },
+    cb (param) {
+        console.log("这里是测试cb")
+        console.log(param);
     }
 });
