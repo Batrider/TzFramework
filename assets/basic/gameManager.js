@@ -4,13 +4,9 @@ cc.Class({
     onLoad() {
         clientEvent.init();
         dataFunc.loadConfigs();
-        var obj = {
-            labelString: '234',
-            callback: this.cb.bind(this),
-            callBackParam: 'woshiCB'
-        };
-        uiFunc.openUI("uiIndicatePanel", function(panel) {
-            panel.getComponent("uiIndicatePanel").init(obj);
+
+        uiFunc.openUI("uiGameStartPanel", function(panel) {
+            panel.getComponent("uiGameStartPanel").init();
         }.bind(this));
     },
 
