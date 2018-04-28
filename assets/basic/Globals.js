@@ -1,3 +1,3 @@
 window.Game = {
-
+    GameManager: null
 }
