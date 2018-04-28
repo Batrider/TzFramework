@@ -5,8 +5,8 @@ cc.Class({
         clientEvent.init();
         dataFunc.loadConfigs();
 
-        uiFunc.openUI("uiVictoryPanel", function(panel) {
-            panel.getComponent("uiVictoryPanel").init();
+        uiFunc.openUI("uiFailPanel", function(panel) {
+            panel.getComponent("uiFailPanel").init();
         }.bind(this));
     },
 
@@ -42,8 +42,5 @@ cc.Class({
             console.log(data);
         };
     },
-    cb (param) {
-        console.log("这里是测试cb")
-        console.log(param);
-    }
+
 });

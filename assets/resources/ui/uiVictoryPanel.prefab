@@ -163,7 +163,7 @@
       "__id__": 1
     },
     "_enabled": true,
-    "showAnimation": 0,
+    "showAnimation": 1,
     "hideAnimation": 0,
     "isUseMask": false,
     "victoryAudio": {
