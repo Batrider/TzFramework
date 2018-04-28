@@ -5,8 +5,8 @@ cc.Class({
         clientEvent.init();
         dataFunc.loadConfigs();
 
-        uiFunc.openUI("uiRigntEffectPanel", function(panel) {
-            panel.getComponent("uiRigntEffectPanel").init();
+        uiFunc.openUI("uiWrongEffectPanel", function(panel) {
+            panel.getComponent("uiWrongEffectPanel").init();
         }.bind(this));
     },
 

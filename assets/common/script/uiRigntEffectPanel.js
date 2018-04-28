@@ -36,9 +36,6 @@ cc.Class({
         }.bind(this), 300);
     },
 
-    start () {
-
-    },
 
     // update (dt) {},
 });
