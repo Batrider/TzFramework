@@ -638,7 +638,10 @@
     "_enabled": true,
     "showAnimation": 0,
     "hideAnimation": 0,
-    "isUseMask": false
+    "isUseMask": false,
+    "rigntAudio": {
+      "__uuid__": "38e170a3-b1b2-4263-a555-43d314407a0f"
+    }
   },
   {
     "__type__": "cc.Animation",

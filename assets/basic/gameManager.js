@@ -5,8 +5,8 @@ cc.Class({
         clientEvent.init();
         dataFunc.loadConfigs();
 
-        uiFunc.openUI("uiWrongEffectPanel", function(panel) {
-            panel.getComponent("uiWrongEffectPanel").init();
+        uiFunc.openUI("uiVictoryPanel", function(panel) {
+            panel.getComponent("uiVictoryPanel").init();
         }.bind(this));
     },
 

@@ -356,7 +356,10 @@
     "_enabled": true,
     "showAnimation": 0,
     "hideAnimation": 0,
-    "isUseMask": false
+    "isUseMask": false,
+    "wrongAudio": {
+      "__uuid__": "7a2d7e97-2279-4d21-9906-9dccb932f6bb"
+    }
   },
   {
     "__type__": "cc.Animation",

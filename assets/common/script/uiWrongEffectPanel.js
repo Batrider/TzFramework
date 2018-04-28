@@ -3,7 +3,7 @@ cc.Class({
     extends: uiPanel,
 
     properties: {
-
+        wrongAudio: cc.AudioClip
     },
 
     onLoad () {
@@ -12,6 +12,7 @@ cc.Class({
     },
     init () {
         this.animation.play();
+        cc.audioEngine.play(this.wrongAudio, false, 1);
     },
     animFinished () {
         setTimeout(function() {

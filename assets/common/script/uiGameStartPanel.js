@@ -3,7 +3,9 @@ cc.Class({
     extends: uiPanel,
 
     properties: {
-        pictures: [cc.SpriteFrame]
+        pictures: [cc.SpriteFrame],
+        oneTwoThreeAudio: cc.AudioClip,
+        readyGoAudio: cc.AudioClip
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -12,7 +14,7 @@ cc.Class({
         this.time = null;
         this.pictureNode = this.node.getChildByName("picture");
         this.sprite = this.pictureNode.getComponent(cc.Sprite);
-        this.animation = this.node.getComponent(cc.Animation)
+        this.animation = this.node.getComponent(cc.Animation);
     },
 
     init () {
@@ -27,6 +29,12 @@ cc.Class({
             clearInterval(this.time);
             return;
         }
+        if (this.count === 3) {
+            cc.audioEngine.play(this.readyGoAudio, false, 1);
+        } else {
+            cc.audioEngine.play(this.oneTwoThreeAudio, false, 1);
+        }
+
         this.pictureNode.active = false;
         this.sprite.spriteFrame = this.pictures[this.count];
         this.pictureNode.active = true;

@@ -182,7 +182,13 @@
       {
         "__uuid__": "0fc0b598-4180-4e73-abbf-be43b44e5c4e"
       }
-    ]
+    ],
+    "oneTwoThreeAudio": {
+      "__uuid__": "2cabdce3-251b-4ba2-af7e-ec8dfb842999"
+    },
+    "readyGoAudio": {
+      "__uuid__": "b3c13746-5793-4967-884c-bc535b318f9a"
+    }
   },
   {
     "__type__": "cc.Animation",
