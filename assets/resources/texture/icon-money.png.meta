@@ -1,14 +1,14 @@
 {
   "ver": "1.0.0",
-  "uuid": "99687631-14f8-4d1b-89e3-d0d45c18240d",
+  "uuid": "47342709-c25e-4f9b-84b0-a8af0791780a",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "subMetas": {
-    "shengziyijie": {
+    "icon-money": {
       "ver": "1.0.3",
-      "uuid": "f1b8f5c3-b1ca-4ca0-9900-58151f8fc726",
-      "rawTextureUuid": "99687631-14f8-4d1b-89e3-d0d45c18240d",
+      "uuid": "574d7ed9-5246-4cd8-8f47-b76ad0ca2f02",
+      "rawTextureUuid": "47342709-c25e-4f9b-84b0-a8af0791780a",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -16,10 +16,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 13,
-      "height": 10,
-      "rawWidth": 13,
-      "rawHeight": 10,
+      "width": 49,
+      "height": 46,
+      "rawWidth": 49,
+      "rawHeight": 46,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,

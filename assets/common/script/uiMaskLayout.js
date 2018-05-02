@@ -10,8 +10,7 @@ cc.Class({
     },
 
     uiOperateCallBack: function() {
-
-        //最后一个需要使用mask的panel
+        // 最后一个需要使用mask的panel
         var lastMaskIndex = -1;
         for (var i = uiFunc.uiList.length - 1; i >= 0; i--) {
             var ui = uiFunc.uiList[i];
@@ -39,8 +38,7 @@ cc.Class({
     },
 
     refresh: function() {
-
-        //最后一个需要使用mask的panel
+        // 最后一个需要使用mask的panel
         var lastMaskIndex = -1;
         for (var i = uiFunc.uiList.length - 1; i >= 0; i--) {
             var ui = uiFunc.uiList[i];
