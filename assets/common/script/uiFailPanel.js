@@ -27,6 +27,9 @@ cc.Class({
     start () {
 
     },
+    init () {
+
+    }
 
     // update (dt) {},
 });

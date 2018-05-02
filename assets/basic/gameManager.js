@@ -5,9 +5,9 @@ cc.Class({
         clientEvent.init();
         dataFunc.loadConfigs();
 
-        uiFunc.openUI("uiFailPanel", function(panel) {
-            panel.getComponent("uiFailPanel").init();
-        }.bind(this));
+        // uiFunc.openUI("uiFailPanel", function(panel) {
+        //     panel.getComponent("uiFailPanel").init();
+        // }.bind(this));
     },
 
     networkExample: function() {
