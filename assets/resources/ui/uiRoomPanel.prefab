@@ -63,8 +63,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 720,
-      "height": 1280
+      "width": 1280,
+      "height": 760
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -72,8 +72,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 360,
-      "y": 640
+      "x": 640,
+      "y": 380
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -175,7 +175,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "title",
+    "_name": "key_title",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
@@ -511,7 +511,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Layout",
+    "_name": "key_playerLayout",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1

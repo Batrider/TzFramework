@@ -6,8 +6,16 @@ cc.Class({
     properties: {},
 
     onLoad() {
-
-        this.playerTemplate = this.nodeDict["playerIcon"].getComponent("playerIcon");
+        this._super();
+        this.playerIcons = [];
+        this.playerModel = this.nodeDict["playerIcon"];
+        this.playerModel.active = false;
+        for (var i = 0; i < GLB.MAX_PLAYER_COUNT; i++) {
+            var playerTemp = cc.instantiate(this.playerModel);
+            playerTemp.active = true;
+            this.nodeDict["playerLayout"].addChild(playerTemp);
+            this.playerIcons.push(playerTemp);
+        }
 
 
         mvs.response.joinRoomResponse = this.joinRoomResponse.bind(this);
@@ -24,7 +32,6 @@ cc.Class({
             matchinfo.mode = 0;
             matchinfo.canWatch = 0;
             matchinfo.tags = GLB.tagsInfo;
-            // this.labelProperty.string = "自定义属性:" + JSON.stringify(GLB.tagsInfo);
             result = mvs.engine.joinRoomWithProperties(matchinfo, "joinRoomWithProperties");
             if (result !== 0) {
                 console.log('进入房间失败,错误码:' + result);
@@ -43,25 +50,33 @@ cc.Class({
         } else {
             console.log('进入房间成功');
             console.log('房间号: ' + roomInfo.roomID);
+            this.nodeDict['title'].getComponent(cc.Label).string = '房间号: ' + roomInfo.roomID;
         }
         GLB.roomId = roomInfo.roomID;
         var userIds = [GLB.userInfo.id]
-        this.player1.string = GLB.userInfo.id;
-        var self = this;
-        userInfoList.forEach(function(item) {
-            if (item.userId === GLB.userInfo.id) {
-            } else if (self.player2.string === '') {
-                self.player2.string = item.userId;
-            } else if (self.player3.string === '') {
-                self.player3.string = item.userId;
-            }
-            if (GLB.userInfo.id !== item.userId) {
-                userIds.push(item.userId);
-            }
-        });
         console.log('房间用户: ' + userIds);
+
+        var playerIcon = null;
+        for (var j = 0; j < userInfoList.length; j++) {
+            playerIcon = userInfoList[j].getComponent('playerIcon');
+            if (playerIcon && !playerIcon.userInfo) {
+                playerIcon.setData(GLB.userInfo);
+                break;
+            }
+        }
+
+        for (var i = 0; i < this.playerIcons.length; i++) {
+            playerIcon = this.playerIcons[i].getComponent('playerIcon');
+            if (playerIcon && !playerIcon.userInfo) {
+                playerIcon.setData(GLB.userInfo);
+                break;
+            }
+        }
+
         mvs.response.sendEventNotify = this.sendEventNotify.bind(this); // 设置事件接收的回调
         GLB.playerUserIds = userIds;
+
+
         if (userIds.length >= GLB.MAX_PLAYER_COUNT) {
             mvs.response.joinOverResponse = this.joinOverResponse.bind(this); // 关闭房间之后的回调
             var result = mvs.engine.joinOver("");
@@ -76,16 +91,10 @@ cc.Class({
 
     joinRoomNotify: function(roomUserInfo) {
         console.log("joinRoomNotify, roomUserInfo:" + JSON.stringify(roomUserInfo));
-        if (this.player1.string === '') {
-            this.player1.string = roomUserInfo.userId;
-        } else if (this.player2.string === '') {
-            this.player2.string = roomUserInfo.userId;
-        } else if (this.player3.string === '') {
-            this.player3.string = roomUserInfo.userId;
-        }
         if (GLB.playerUserIds.length === GLB.MAX_PLAYER_COUNT - 1) {
         }
-    },
+    }
+    ,
 
     joinOverResponse: function(joinOverRsp) {
         if (joinOverRsp.status === 200) {
@@ -94,7 +103,8 @@ cc.Class({
         } else {
             console.log("关闭房间失败，回调通知错误码：", joinOverRsp.status);
         }
-    },
+    }
+    ,
 
     notifyGameStart: function() {
         GLB.isRoomOwner = true;
@@ -112,7 +122,8 @@ cc.Class({
         // 发送的事件要缓存起来，收到异步回调时用于判断是哪个事件发送成功
         GLB.events[result.sequence] = event;
         console.log("发起游戏开始的通知，等待回复");
-    },
+    }
+    ,
 
     sendEventResponse: function(info) {
         if (!info
@@ -127,7 +138,8 @@ cc.Class({
             delete GLB.events[info.sequence]
             this.startGame();
         }
-    },
+    }
+    ,
 
     sendEventNotify: function(info) {
         if (info
@@ -143,4 +155,5 @@ cc.Class({
             this.startGame();
         }
     }
-});
+})
+;

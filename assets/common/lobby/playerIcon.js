@@ -45,11 +45,18 @@ cc.Class({
         //     }
         // },
     },
+    setData: function(userInfo) {
+        this.userInfo = userInfo;
+        this.playerName = userInfo.id;
+    },
+
+    remove: function() {
+        this.userInfo = null;
+    },
 
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad () {
-        this.node.active = false;
+    onLoad() {
     },
 
     start() {

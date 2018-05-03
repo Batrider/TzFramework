@@ -15,14 +15,7 @@ cc.Class({
     },
 
     matchVsInit: function() {
-        GLB.gameId = '200757';
-        GLB.appKey = '6783e7d174ef41b98a91957c561cf305';
-        GLB.secret = 'da47754579fa47e4affab5785451622c';
-        GLB.platform = 'alpha';
-
-
         mvs.response.initResponse = this.initResponse.bind(this);
-        // SDK初始化
         var result = mvs.engine.init(mvs.response, GLB.channel, GLB.platform, GLB.gameId);
         if (result !== 0) {
             console.log('初始化失败,错误码:' + result);
