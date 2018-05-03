@@ -16,7 +16,12 @@ cc.Class({
     randomRoom: function(event) {
         GLB.matchType = GLB.RANDOM_MATCH; // 修改匹配方式为随机匹配
         console.log('开始随机匹配');
-        uiFunc.openUI("uiRoomPanel");
+        uiFunc.openUI("uiRandomRoomPanel", function(obj) {
+            var randomRoom = obj.getComponent("uiRandomRoomPanel");
+            if (randomRoom) {
+                randomRoom.joinRandomRoom();
+            }
+        });
     },
 
     creatorRoom: function(event) {

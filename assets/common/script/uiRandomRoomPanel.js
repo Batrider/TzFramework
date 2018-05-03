@@ -16,10 +16,15 @@ cc.Class({
             this.nodeDict["playerLayout"].addChild(playerTemp);
             this.playerIcons.push(playerTemp);
         }
-
+        this.nodeDict["quit"].on("click", this.leaveRoom, this);
 
         mvs.response.joinRoomResponse = this.joinRoomResponse.bind(this);
         mvs.response.joinRoomNotify = this.joinRoomNotify.bind(this);
+        mvs.response.leaveRoomResponse = this.leaveRoomResponse.bind(this);
+        mvs.response.leaveRoomNotify = this.leaveRoomNotify.bind(this);
+    },
+
+    joinRandomRoom: function() {
         var result = null;
         if (GLB.matchType === GLB.RANDOM_MATCH) {
             result = mvs.engine.joinRandomRoom(GLB.MAX_PLAYER_COUNT, '');
@@ -58,10 +63,12 @@ cc.Class({
 
         var playerIcon = null;
         for (var j = 0; j < userInfoList.length; j++) {
-            playerIcon = userInfoList[j].getComponent('playerIcon');
+            playerIcon = this.playerIcons[j].getComponent('playerIcon');
             if (playerIcon && !playerIcon.userInfo) {
-                playerIcon.setData(GLB.userInfo);
-                break;
+                playerIcon.setData(userInfoList[j]);
+                if (GLB.userInfo.id !== userInfoList[j].userId) {
+                    userIds.push(userInfoList[j].userId);
+                }
             }
         }
 
@@ -91,10 +98,49 @@ cc.Class({
 
     joinRoomNotify: function(roomUserInfo) {
         console.log("joinRoomNotify, roomUserInfo:" + JSON.stringify(roomUserInfo));
+        var playerIcon = null;
+        for (var j = 0; j < this.playerIcons.length; j++) {
+            playerIcon = this.playerIcons[j].getComponent('playerIcon');
+            if (playerIcon && !playerIcon.userInfo) {
+                playerIcon.setData(roomUserInfo);
+                break;
+            }
+        }
         if (GLB.playerUserIds.length === GLB.MAX_PLAYER_COUNT - 1) {
         }
-    }
-    ,
+    },
+
+    leaveRoom: function() {
+        mvs.engine.leaveRoom();
+    },
+
+    leaveRoomNotify: function(leaveRoomInfo) {
+        if (GLB.roomId === leaveRoomInfo.roomID) {
+            for (var i = 0; i < this.playerIcons.length; i++) {
+                var playerIcon = this.playerIcons[i].getComponent('playerIcon');
+                if (playerIcon && playerIcon.userInfo && playerIcon.playerId === leaveRoomInfo.userId) {
+                    playerIcon.init();
+                    break;
+                }
+            }
+        }
+    },
+
+    leaveRoomResponse: function(leaveRoomRsp) {
+        if (leaveRoomRsp.status === 200) {
+            console.log("离开房间成功");
+            uiFunc.closeUI("uiRandomRoomPanel");
+            for (var i = 0; i < this.playerIcons.length; i++) {
+                var playerIcon = this.playerIcons[i].getComponent('playerIcon');
+                if (playerIcon) {
+                    playerIcon.init();
+                }
+            }
+        } else {
+            console.log("离开房间失败");
+        }
+    },
+
 
     joinOverResponse: function(joinOverRsp) {
         if (joinOverRsp.status === 200) {
@@ -103,8 +149,7 @@ cc.Class({
         } else {
             console.log("关闭房间失败，回调通知错误码：", joinOverRsp.status);
         }
-    }
-    ,
+    },
 
     notifyGameStart: function() {
         GLB.isRoomOwner = true;
@@ -122,8 +167,7 @@ cc.Class({
         // 发送的事件要缓存起来，收到异步回调时用于判断是哪个事件发送成功
         GLB.events[result.sequence] = event;
         console.log("发起游戏开始的通知，等待回复");
-    }
-    ,
+    },
 
     sendEventResponse: function(info) {
         if (!info
@@ -138,8 +182,7 @@ cc.Class({
             delete GLB.events[info.sequence]
             this.startGame();
         }
-    }
-    ,
+    },
 
     sendEventNotify: function(info) {
         if (info
@@ -155,5 +198,4 @@ cc.Class({
             this.startGame();
         }
     }
-})
-;
+});

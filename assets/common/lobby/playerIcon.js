@@ -27,41 +27,37 @@ cc.Class({
         playerSprite: {
             default: null,
             type: cc.Sprite
-        }
+        },
 
-        // foo: {
-        //     // ATTRIBUTES:
-        //     default: null,        // The default value will be used only when the component attaching
-        //                           // to a node for the first time
-        //     type: cc.SpriteFrame, // optional, default is typeof default
-        //     serializable: true,   // optional, default is true
-        // },
-        // bar: {
-        //     get () {
-        //         return this._bar;
-        //     },
-        //     set (value) {
-        //         this._bar = value;
-        //     }
-        // },
+        defaultSpriteFrame: {
+            default: null,
+            type: cc.SpriteFrame
+        }
     },
     setData: function(userInfo) {
         this.userInfo = userInfo;
-        this.playerName = userInfo.id;
+        this.playerId = userInfo.id ? userInfo.id : userInfo.userId;
+        this.playerName.string = userInfo.name ? userInfo.name : '' + this.playerId;
+        var remoteUrl = "https://gss0.baidu.com/-fo3dSag_xI4khGko9WTAnF6hhy/zhidao" +
+            "/wh%3D600%2C800/sign=d4d4da904990f60304e5944109229f23/9e3df8dcd100baa19347111a4410b912c8fc2e23.jpg";// userInfo.avatar;
+        cc.loader.load(remoteUrl, function(err, texture) {
+            if (this && this.playerSprite) {
+                this.playerSprite.spriteFrame = new cc.SpriteFrame();
+                this.playerSprite.spriteFrame.setTexture(texture);
+            }
+            // Use texture to create sprite frame
+        }.bind(this));
     },
 
-    remove: function() {
+    init: function() {
         this.userInfo = null;
-    },
-
-    // LIFE-CYCLE CALLBACKS:
-
-    onLoad() {
+        this.playerName.string = "null";
+        this.playerSprite.spriteFrame = this.defaultSpriteFrame;
     },
 
     start() {
-
-    },
+        this.init();
+    }
 
     // update (dt) {},
 });
