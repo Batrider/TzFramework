@@ -35,7 +35,7 @@
   "fit-width": false,
   "group-list": [
     "default",
-    "props",
+    "item",
     "bullet",
     "player"
   ],
@@ -45,6 +45,5 @@
     "width": 960
   },
   "use-customize-simulator": false,
-  "use-project-simulator-setting": false,
-  "start-scene": "current"
+  "use-project-simulator-setting": false
 }

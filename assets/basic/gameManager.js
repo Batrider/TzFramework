@@ -3,7 +3,6 @@ var GLB = require("Glb");
 
 cc.Class({
     extends: cc.Component,
-
     onLoad() {
         Game.GameManager = this;
         cc.director.getCollisionManager().enabled = true;
