@@ -31,9 +31,9 @@ cc.Class({
                         cc.error("控件名字重复!" + children[i].name);
                     }
                     nodeDict[nodeName] = children[i];
-                    if (children[i].childrenCount > 0) {
-                        linkWidget(children[i], nodeDict);
-                    }
+                }
+                if (children[i].childrenCount > 0) {
+                    linkWidget(children[i], nodeDict);
                 }
             }
         }.bind(this);
