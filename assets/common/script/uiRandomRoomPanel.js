@@ -46,7 +46,9 @@ cc.Class({
 
     startGame: function() {
         console.log('游戏即将开始');
-        cc.director.loadScene('game');
+        cc.director.loadScene('game', function() {
+            uiFunc.openUI("uiGamePanel");
+        });
     },
 
     joinRoomResponse: function(status, userInfoList, roomInfo) {
@@ -58,9 +60,7 @@ cc.Class({
             this.nodeDict['title'].getComponent(cc.Label).string = '房间号: ' + roomInfo.roomID;
         }
         GLB.roomId = roomInfo.roomID;
-        var userIds = [GLB.userInfo.id]
-        console.log('房间用户: ' + userIds);
-
+        var userIds = [GLB.userInfo.id];
         var playerIcon = null;
         for (var j = 0; j < userInfoList.length; j++) {
             playerIcon = this.playerIcons[j].getComponent('playerIcon');
@@ -91,7 +91,7 @@ cc.Class({
             if (result !== 0) {
                 console.log("关闭房间失败，错误码：", result);
             }
-
+            console.log('房间用户: ' + userIds);
             GLB.playerUserIds = userIds;
         }
     },

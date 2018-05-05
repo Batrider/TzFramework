@@ -3,9 +3,8 @@ var obj = {
     PROPERTY_MATCH: 2,  // 属性匹配
     MAX_PLAYER_COUNT: 2,
     GAME_START_EVENT: "gameStart",
-    NEW_START_EVENT: "newStar",
-    PLAYER_MOVE_EVENT: "playerMove",
-    GAIN_SCORE_EVENT: "gainScore",
+    NEW_ITEM_EVENT: "newItem",
+    PLAYER_FLY_EVENT: "playerFly",
     PLAYER_POSITION_EVENT: "playerPosition",
 
     channel: 'MatchVS',
@@ -13,7 +12,7 @@ var obj = {
     gameId: 200757,
     gameVersion: 1,
     appKey: '6783e7d174ef41b98a91957c561cf305',
-    secret: 'da47754579fa47e4affab5785451622c',    
+    secret: 'da47754579fa47e4affab5785451622c',
 
     matchType: 1,
     tagsInfo: {"title": "A"},
@@ -23,7 +22,7 @@ var obj = {
     isRoomOwner: false,
     events: {},
 
-    syncFrame: false,
+    syncFrame: true,
     FRAME_RATE: 5,
     roomId: 0,
     playertime: 180,
