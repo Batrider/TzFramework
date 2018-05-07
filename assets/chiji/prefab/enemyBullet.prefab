@@ -10,7 +10,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "bulletNormal",
+    "_name": "enemyBullet",
     "_objFlags": 0,
     "_parent": null,
     "_children": [
@@ -103,7 +103,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 78,
-      "height": 32
+      "height": 31
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -130,7 +130,7 @@
     },
     "_enabled": true,
     "_spriteFrame": {
-      "__uuid__": "c27c09f8-b007-48a0-8932-ea27531eb8a0"
+      "__uuid__": "280ccff7-607e-4fcb-a696-55d6887872c8"
     },
     "_type": 0,
     "_sizeMode": 1,
@@ -153,7 +153,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "8da09484-4e48-49e2-b041-5cde53ec1c47"
     },
     "fileId": "baahrXLGtB+qxBQGkQlxHD",
     "sync": false
@@ -186,9 +186,7 @@
       "__id__": 1
     },
     "_enabled": true,
-    "icon": null,
-    "speed": 500,
-    "bulletType": 0
+    "speed": -500
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -196,7 +194,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "8da09484-4e48-49e2-b041-5cde53ec1c47"
     },
     "fileId": "79r1p/bMNFJ5BL7k2Luq58",
     "sync": false

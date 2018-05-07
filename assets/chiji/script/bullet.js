@@ -1,11 +1,9 @@
+var mvs = require("Matchvs");
+var GLB = require("Glb");
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        icon: {
-            default: null,
-            type: cc.Sprite
-        },
         speed: 0
     },
 
@@ -15,23 +13,32 @@ cc.Class({
         var worldPos = hostPlayer.firePoint.convertToWorldSpaceAR(cc.v2(0, 0));
         var bulletPoint = this.node.parent.convertToNodeSpaceAR(worldPos);
         this.node.position = bulletPoint;
-        this.speed *= hostPlayer.teamType === TeamType.Right ? -1 : 1;
     },
 
     onCollisionEnter: function(other) {
         var group = cc.game.groupList[other.node.groupIndex];
         if (group === 'bullet') {
-            var bullet = other.node.getComponent('normalBullet');
-            if (bullet) {
-                if (bullet.hostPlayer.team !== this.hostPlayer.team) {
-                    Game.bulletManger.recycleBullet(this);
-                }
+            var bullet = other.node.getComponent('bullet');
+            if (bullet && bullet.hostPlayer.camp !== this.hostPlayer.camp) {
+                Game.bulletManger.recycleBullet(this);
             }
         } else if (group === 'player') {
             var player = other.node.getComponent('player');
-            if (player && player.teamType !== this.hostPlayer.teamType) {
-                player.damage();
+            if (player && !player.dead && player.camp !== this.hostPlayer.camp) {
+                Game.bulletManger.recycleBullet(this);
+                if (GLB.isRoomOwner) {
+                    player.hurt();
+                }
             }
+        } else if (group === "item") {
+            Game.bulletManger.recycleBullet(this);
+            var item = other.node.getComponent('item');
+            if (item) {
+                if (GLB.isRoomOwner) {
+                    this.hostPlayer.getItem(item.itemType);
+                }
+            }
+            other.node.destroy();
         }
     },
 

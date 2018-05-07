@@ -2,14 +2,19 @@ window.Game = {
     duckManger: null,
     gameManager: null,
     bulletManger: null,
-
-    fireInterval: 2
+    itemManager: null,
+    fireInterval: 2,
+    itemInterval: 5
 }
 
-window.TeamType = cc.Enum({
+window.Camp = cc.Enum({
     None: 0,
-    Left1: -1,
-    Left2: -1,
-    Right1: -1,
-    Right2: -1
+    Friend: -1,
+    Enemy: -1
+})
+
+window.ItemType = cc.Enum({
+    None: 0,
+    Shield: 1,
+    Track: 2
 })

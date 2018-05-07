@@ -1,56 +1,68 @@
-var normalBullet = require('normalBullet');
-var trackBullet = require('trackBullet');
-
+var mvs = require("Matchvs");
+var GLB = require("Glb");
 cc.Class({
 
     extends: cc.Component,
     properties: {
-        normalBulletPrefab: {
+        friendBulletPrefab: {
             default: null,
             type: cc.Prefab
         },
-        trackBulletPrefab: {
+        enemyBulletPrefab: {
             default: null,
             type: cc.Prefab
         }
     },
-    // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
         Game.bulletManger = this;
-        // 普通子弹--
-        this.normalBulletPool = new cc.NodePool('normalBullet');
-        // 追踪弹--
-        this.trackBulletPool = new cc.NodePool('trackBullet');
+        // 己方子弹--
+        this.friendBulletPool = new cc.NodePool();
+        // 敌方子弹--
+        this.enemyBulletPool = new cc.NodePool();
+
+        if (GLB.isRoomOwner) {
+            this.schedule(this.scheduleFire.bind(this), Game.fireInterval);
+        }
     },
 
-    spawnNormalBullet: function() {
-        var temp = this.normalBulletPool.get(normalBullet)
-        if (!temp) {
-            temp = cc.instantiate(this.normalBulletPrefab);
+    scheduleFire: function() {
+        var msg = {
+            action: GLB.PLAYER_FIRE_EVENT
+        };
+        var result = mvs.engine.sendEventEx(0, JSON.stringify(msg), 0, GLB.playerUserIds);
+        if (result.result !== 0) {
+            console.log(" 定时开火事件发送失败", result.result);
         }
-        return temp;
     },
 
-    spawnTrackBullet: function() {
-        var temp = this.trackBulletPool.get(trackBullet)
-        if (!temp) {
-            temp = cc.instantiate(this.trackBulletPrefab);
+
+    spawnBullet: function(hostPlayer) {
+        var bulletObj = null;
+        if (hostPlayer.camp === Camp.Enemy) {
+            bulletObj = this.enemyBulletPool.get()
+            if (!bulletObj) {
+                bulletObj = cc.instantiate(this.enemyBulletPrefab);
+            }
+        } else {
+            bulletObj = this.friendBulletPool.get()
+            if (!bulletObj) {
+                bulletObj = cc.instantiate(this.friendBulletPrefab);
+            }
         }
-        return temp;
+        if (bulletObj) {
+            var bulletScript = bulletObj.getComponent('bullet');
+            if (bulletScript) {
+                bulletScript.init(hostPlayer);
+            }
+        }
     },
 
-    recycleBullet: function(bullet) {
-        bullet.node.active = false;
-        if (bullet instanceof normalBullet) {
-            this.normalBulletPool.put(bullet.node);
-            return;
+    recycleBullet: function(bulletScript) {
+        if (bulletScript.hostPlayer.camp === Camp.Enemy) {
+            this.enemyBulletPool.put(bulletScript.node);
+        } else {
+            this.friendBulletPool.put(bulletScript.node);
         }
-        if (bullet instanceof trackBullet) {
-            this.trackBulletPool.put(bullet.node);
-            return;
-        }
-        bullet.node.destroy();
     }
-
 });

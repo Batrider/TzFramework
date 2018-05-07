@@ -10,7 +10,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "bulletNormal",
+    "_name": "friendBullet",
     "_objFlags": 0,
     "_parent": null,
     "_children": [
@@ -153,7 +153,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "3385a3db-4df0-4972-ac32-d1bc541ab16c"
     },
     "fileId": "baahrXLGtB+qxBQGkQlxHD",
     "sync": false
@@ -187,8 +187,7 @@
     },
     "_enabled": true,
     "icon": null,
-    "speed": 500,
-    "bulletType": 0
+    "speed": 500
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -196,7 +195,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "3385a3db-4df0-4972-ac32-d1bc541ab16c"
     },
     "fileId": "79r1p/bMNFJ5BL7k2Luq58",
     "sync": false

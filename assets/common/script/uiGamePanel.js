@@ -11,28 +11,6 @@ cc.Class({
     },
     onLoad() {
         mvs.response.sendEventNotify = this.sendEventNotify.bind(this);
-        mvs.response.frameUpdate = this.frameUpdate.bind(this);
-        mvs.response.leaveRoomNotify = this.leaveRoomNotify.bind(this);
-
-        if (GLB.syncFrame === true && GLB.isRoomOwner === true) {
-            mvs.response.setFrameSyncResponse = this.setFrameSyncResponse.bind(this);
-            var result = mvs.engine.setFrameSync(GLB.FRAME_RATE);
-            if (result !== 0) {
-                console.log('设置帧同步率失败,错误码:' + result);
-            }
-        }
-        if (GLB.syncFrame === true) {
-            console.log("同步帧率:" + GLB.FRAME_RATE);
-        }
-    },
-
-    setFrameSyncResponse: function(rsp) {
-        console.log('setFrameSyncResponse, status=' + rsp.mStatus);
-        if (rsp.mStatus !== 200) {
-            console.log('设置同步帧率失败，status=' + rsp.mStatus);
-        } else {
-            console.log('设置同步帧率成功, 帧率为:' + GLB.FRAME_RATE);
-        }
     },
 
     start() {
@@ -40,29 +18,45 @@ cc.Class({
         this.InitPlayers();
     },
 
+    // 玩家行为通知--
     sendEventNotify: function(info) {
-        if (info && info.cpProto) {
-            if (info.cpProto.indexOf(GLB.PLAYER_FLY_EVENT) >= 0) {
-                var cpProto = JSON.parse(info.cpProto);
-                var player = this.getPlayerByUserId(info.srcUserId);
-                if (player && !player.isSelf()) {
-                    player.currentSpeed = cpProto.speed;
+        var cpProto = JSON.parse(info.cpProto);
+
+        var player = null;
+        if (info.cpProto.indexOf(GLB.PLAYER_FLY_EVENT) >= 0) {
+            player = this.getPlayerByUserId(info.srcUserId);
+            if (player) {
+                player.flyNotify(cpProto);
+            }
+        }
+
+        if (info.cpProto.indexOf(GLB.PLAYER_FIRE_EVENT) >= 0) {
+            for (var i = 0; i < GLB.playerUserIds.length; i++) {
+                player = this.getPlayerByUserId(GLB.playerUserIds[i]);
+                if (player) {
+                    player.fireNotify(cpProto);
                 }
             }
         }
-    },
 
-    frameUpdate: function(rsp) {
-        for (var i = 0; i < rsp.frameItems.length; i++) {
-            var info = rsp.frameItems[i];
-            if (info && info.cpProto) {
-                if (info.cpProto.indexOf(GLB.PLAYER_POSITION_EVENT) >= 0) {
-                    var cpProto = JSON.parse(info.cpProto);
-                    var player = this.getPlayerByUserId(info.srcUserID);
-                    if (player && !player.isSelf()) {
-                        player.syncPosYs.push(cpProto.y);
-                    }
-                }
+        if (info.cpProto.indexOf(GLB.PLAYER_GET_ITEM_EVENT) >= 0) {
+            player = this.getPlayerByUserId(info.srcUserId);
+            if (player) {
+                player.getItemNotify(cpProto);
+            }
+        }
+
+        if (info.cpProto.indexOf(GLB.PLAYER_REMOVE_ITEM_EVENT) >= 0) {
+            player = this.getPlayerByUserId(info.srcUserId);
+            if (player) {
+                player.removeItemNotify(cpProto);
+            }
+        }
+
+        if (info.cpProto.indexOf(GLB.PLAYER_HURT_EVENT) >= 0) {
+            player = this.getPlayerByUserId(info.srcUserId);
+            if (player) {
+                player.hurtNotify(cpProto);
             }
         }
     },

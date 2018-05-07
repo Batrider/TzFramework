@@ -325,10 +325,15 @@
       "__id__": 1
     },
     "_enabled": true,
-    "_defaultClip": null,
+    "_defaultClip": {
+      "__uuid__": "1c8e19ab-8348-475a-96bb-44070484605d"
+    },
     "_clips": [
       {
         "__uuid__": "1c8e19ab-8348-475a-96bb-44070484605d"
+      },
+      {
+        "__uuid__": "9ea56eaf-3f05-426f-acd3-3f6bab53381b"
       }
     ],
     "playOnLoad": false
@@ -370,7 +375,10 @@
     "firePoint": {
       "__id__": 8
     },
-    "_teamType": 1
+    "smokePrefab": {
+      "__uuid__": "3265bd9c-7862-4985-85c1-757ed3ea88d6"
+    },
+    "_camp": 1
   },
   {
     "__type__": "cc.PrefabInfo",

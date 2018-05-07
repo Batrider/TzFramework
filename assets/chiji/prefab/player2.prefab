@@ -62,7 +62,7 @@
     },
     "_rotationX": 0,
     "_rotationY": 0,
-    "_scaleX": -1,
+    "_scaleX": 1,
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
@@ -139,7 +139,7 @@
     },
     "_enabled": true,
     "_spriteFrame": {
-      "__uuid__": "74849352-3d3b-4aa2-bdd5-63ce1c2487fa"
+      "__uuid__": "152058a8-2974-4384-a759-a5f45492704f"
     },
     "_type": 0,
     "_sizeMode": 2,
@@ -162,7 +162,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "db66f42e-952a-4bd1-9178-cedb5da5c93f"
     },
     "fileId": "6cB/B6YWxNi41/L253f+sR",
     "sync": false
@@ -251,7 +251,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "db66f42e-952a-4bd1-9178-cedb5da5c93f"
     },
     "fileId": "70lwOa9ARJp5bFjmM4gyYR",
     "sync": false
@@ -312,7 +312,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "db66f42e-952a-4bd1-9178-cedb5da5c93f"
     },
     "fileId": "7aQYgJv4JNI5LQqfo1pjF3",
     "sync": false
@@ -325,19 +325,12 @@
       "__id__": 1
     },
     "_enabled": true,
-    "_defaultClip": null,
+    "_defaultClip": {
+      "__uuid__": "9fdf1af6-8e3c-4789-9617-dc13e5744b0e"
+    },
     "_clips": [
       {
-        "__uuid__": "1c8e19ab-8348-475a-96bb-44070484605d"
-      },
-      {
         "__uuid__": "9fdf1af6-8e3c-4789-9617-dc13e5744b0e"
-      },
-      {
-        "__uuid__": "7f2d3433-37b9-4bba-9879-bd4363dfdba8"
-      },
-      {
-        "__uuid__": "f5557686-f525-44ad-88da-837772f645f4"
       }
     ],
     "playOnLoad": false
@@ -379,7 +372,7 @@
     "firePoint": {
       "__id__": 8
     },
-    "_teamType": 3
+    "_camp": 1
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -387,7 +380,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "db66f42e-952a-4bd1-9178-cedb5da5c93f"
     },
     "fileId": "24+tBXDQ9Ef461O0bKHFRB",
     "sync": false

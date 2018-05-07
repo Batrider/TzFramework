@@ -5,7 +5,11 @@ var obj = {
     GAME_START_EVENT: "gameStart",
     NEW_ITEM_EVENT: "newItem",
     PLAYER_FLY_EVENT: "playerFly",
+    PLAYER_FIRE_EVENT: "playerFire",
     PLAYER_POSITION_EVENT: "playerPosition",
+    PLAYER_GET_ITEM_EVENT: "playerGetItem",
+    PLAYER_REMOVE_ITEM_EVENT: "playerRemoveItem",
+    PLAYER_HURT_EVENT: "playerHurt",
 
     channel: 'MatchVS',
     platform: 'alpha',
@@ -15,7 +19,7 @@ var obj = {
     secret: 'da47754579fa47e4affab5785451622c',
 
     matchType: 1,
-    tagsInfo: {"title": "A"},
+    tagsInfo: {"title": "A"},
     userInfo: null,
     playerUserIds: [],
     playerSet: new Set(),

@@ -16,125 +16,155 @@ cc.Class({
             default: null,
             type: cc.Node
         },
-        _teamType: TeamType.None,
-        teamType: {
+        smokePrefab: {
+            default: null,
+            type: cc.Prefab
+        },
+        _camp: Camp.None,
+        camp: {
             get() {
-                return this._teamType;
+                return this._camp;
             },
             set(value) {
-                this._teamType = value;
+                this._camp = value;
             },
-            type: TeamType
-        },
-
-
+            type: Camp
+        }
     },
 
     init: function(userId) {
         this.gravity = 1500;
         this.currentSpeed = 0;
         this.flySpeed = 800;
-        this.acc = this.gravity;
         this.groundY = -580;
-        this.syncPosYs = [];
         this.userId = userId;
         this.isShield = false;
         this.isTrack = false;
         this.shieldSp.node.active = false;
         this.anim = this.node.getComponent(cc.Animation);
-        this.anim.play('player1fly');
 
         if (this.isSelf()) {
-            var id = setInterval(() => {
-                var result = mvs.engine.sendFrameEvent(JSON.stringify({
-                    action: GLB.PLAYER_POSITION_EVENT,
-                    y: this.node.y,
-                    ts: new Date().getTime()
-                }));
-                console.log(result);
-                if (GLB.isGameOver === true) {
-                    clearInterval(id);
-                }
-            }, 200);
             this.setInputControl();
         }
     },
-    start() {
-        // 定时子弹--
-        this.schedule(this.fire.bind(this), Game.fireInterval);
-    },
 
     update: function(dt) {
-        if (this.isSelf()) {
-            this.currentSpeed -= dt * this.gravity;
-            this.node.y += dt * this.currentSpeed;
-            if (this.node.y < this.groundY) {
-                this.node.y = this.groundY;
-            }
-        } else {
-            if (this.syncPosYs.length > 0) {
-                if (!this.curSyncPosY) {
-                    this.curSyncPosY = this.syncPosYs.pop();
-                }
-                this.node.y = cc.lerp(this.node.y, this.curSyncPosY, 10 * dt);
-                if (Math.abs(this.node.y - this.curSyncPosY) < 5) {
-                    this.curSyncPosY = null;
-                }
-            }
+        this.currentSpeed -= dt * this.gravity;
+        this.node.y += dt * this.currentSpeed;
+        if (this.node.y < this.groundY) {
+            this.node.y = this.groundY;
         }
     },
 
-
-    getShield: function() {
-        this.isShield = true;
-        this.shieldSp.active = true;
+    getItem: function(itemType) {
+        var msg = {
+            action: GLB.PLAYER_GET_ITEM_EVENT,
+            itemType: itemType
+        };
+        var result = mvs.engine.sendEventEx(0, JSON.stringify(msg), 0, GLB.playerUserIds);
+        if (result.result !== 0) {
+            console.log("获得物品事件发送失败", result.result);
+        }
     },
 
-    getTrack: function() {
-        this.isTrack = true;
+    getItemNotify: function(cpProto) {
+        var itemType = cpProto.itemType;
+        switch (itemType) {
+            case ItemType.Shield:
+                this.setShield(true);
+                break;
+            case ItemType.Track:
+                this.setTrack(true);
+                break;
+            default:
+                break;
+        }
     },
 
-    damage: function() {
+    setShield: function(active) {
+        this.isShield = active;
+        this.shieldSp.active = active;
+    },
+
+    setTrack: function(active) {
+        this.isTrack = active;
+    },
+
+    removeItem: function(itemType) {
+        var msg = {
+            action: GLB.PLAYER_REMOVE_ITEM_EVENT,
+            itemType: itemType
+        };
+        var result = mvs.engine.sendEventEx(0, JSON.stringify(msg), 0, GLB.playerUserIds);
+        if (result.result !== 0) {
+            console.log("移除物品事件发送失败", result.result);
+        }
+    },
+
+    removeItemNotify: function(cpProto) {
+        var itemType = cpProto.itemType;
+        switch (itemType) {
+            case ItemType.Shield:
+                this.setShield(false);
+                break;
+            case ItemType.Track:
+                this.setTrack(false);
+                break;
+            default:
+                break;
+        }
+    },
+
+    hurt: function() {
+        var msg = {
+            action: GLB.PLAYER_HURT_EVENT
+        };
+        var result = mvs.engine.sendEventEx(0, JSON.stringify(msg), 0, GLB.playerUserIds);
+        if (result.result !== 0) {
+            console.log("受伤事件发送失败", result.result);
+        }
+    },
+
+    hurtNotify: function(cpProto) {
         if (this.isShield) {
-            this.isShield = false;
-            this.shieldSp.active = false;
+            this.setShield(false);
         } else {
             this.dead = true;
             // 死亡表现--
+            this.anim.play('dead');
+            this.currentSpeed = -1000;
+            console.log('游戏结束');
         }
     },
 
     fly: function() {
-        this.currentSpeed = this.flySpeed;
-        this.sendFlyMessage();
-    },
-
-    fire: function() {
-        if (this.isTrack) {
-            Game.bulletManger.spawnTrackBullet();
-        } else {
-            var bullet = Game.bulletManger.spawnNormalBullet();
-            if (bullet) {
-                var bulletScript = bullet.getComponent("normalBullet");
-                if (bulletScript) {
-                    bulletScript.init(this);
-                }
-            }
+        if (this.dead) {
+            return;
         }
-    },
-
-    syncPosition: function() {
-        // 不是自己就同步位置--
-        // 由房主来控制分发事件--
-    },
-
-    sendFlyMessage: function() {
-        var msg = { action: GLB.PLAYER_FLY_EVENT };
-        msg.speed = this.currentSpeed;
-        var result = mvs.engine.sendEvent(JSON.stringify(msg));
+        var msg = {
+            action: GLB.PLAYER_FLY_EVENT,
+            speed: this.flySpeed,
+            y: this.node.y
+        };
+        var result = mvs.engine.sendEventEx(0, JSON.stringify(msg), 0, GLB.playerUserIds);
         if (result.result !== 0) {
-            return console.error("移动事件发送失败", result.result);
+            console.log("移动事件发送失败", result.result);
         }
+    },
+
+    flyNotify: function(cpProto) {
+        this.currentSpeed = cpProto.speed;
+        // 做插值处理，平滑位置--
+        this.node.y = cpProto.y;
+        this.anim.play();
+        // smoke
+    },
+
+    fireNotify: function() {
+        if (this.dead) {
+            return;
+        }
+        Game.bulletManger.spawnBullet(this);
     },
 
     setInputControl: function() {
@@ -143,19 +173,8 @@ cc.Class({
             event: cc.EventListener.KEYBOARD,
             onKeyPressed: function(keyCode, event) {
                 switch (keyCode) {
-                    case cc.KEY.up: {
-                        self.node.y += 10;
-                        break;
-                    }
-                    case cc.KEY.down: {
-                        self.node.y -= 10;
-                        break;
-                    }
                     case cc.KEY.space: {
                         self.fly();
-                        break;
-                    }
-                    default: {
                         break;
                     }
                 }
@@ -168,5 +187,5 @@ cc.Class({
             return true;
         }
         return false;
-    }
+    },
 });

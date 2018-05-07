@@ -62,7 +62,7 @@
     },
     "_rotationX": 0,
     "_rotationY": 0,
-    "_scaleX": 1,
+    "_scaleX": -1,
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
@@ -162,7 +162,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "08788849-727a-47e3-a8d4-612cf9918bbd"
     },
     "fileId": "7a3bfLIWpMOJqSXxZV1OoJ",
     "sync": false
@@ -251,7 +251,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "08788849-727a-47e3-a8d4-612cf9918bbd"
     },
     "fileId": "f18FiCkcxHEqiloSIJoqFL",
     "sync": false
@@ -312,7 +312,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "08788849-727a-47e3-a8d4-612cf9918bbd"
     },
     "fileId": "ddE54BfilMd6aZXq7KkD9r",
     "sync": false
@@ -325,10 +325,15 @@
       "__id__": 1
     },
     "_enabled": true,
-    "_defaultClip": null,
+    "_defaultClip": {
+      "__uuid__": "7f2d3433-37b9-4bba-9879-bd4363dfdba8"
+    },
     "_clips": [
       {
-        "__uuid__": "9fdf1af6-8e3c-4789-9617-dc13e5744b0e"
+        "__uuid__": "7f2d3433-37b9-4bba-9879-bd4363dfdba8"
+      },
+      {
+        "__uuid__": "9ea56eaf-3f05-426f-acd3-3f6bab53381b"
       }
     ],
     "playOnLoad": false
@@ -370,7 +375,10 @@
     "firePoint": {
       "__id__": 8
     },
-    "_teamType": 3
+    "smokePrefab": {
+      "__uuid__": "3265bd9c-7862-4985-85c1-757ed3ea88d6"
+    },
+    "_camp": 2
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -378,7 +386,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "08788849-727a-47e3-a8d4-612cf9918bbd"
     },
     "fileId": "7aUhyVJdxG+K00n8eU/XXz",
     "sync": false
