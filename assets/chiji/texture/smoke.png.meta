@@ -5,7 +5,7 @@
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "subMetas": {
-    "烟雾": {
+    "smoke": {
       "ver": "1.0.3",
       "uuid": "f8c2d4e9-88ca-45a0-a33a-efe2224828ed",
       "rawTextureUuid": "34b97e5c-2f40-4be1-a094-680c0c745832",

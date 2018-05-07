@@ -10,6 +10,9 @@ var obj = {
     PLAYER_GET_ITEM_EVENT: "playerGetItem",
     PLAYER_REMOVE_ITEM_EVENT: "playerRemoveItem",
     PLAYER_HURT_EVENT: "playerHurt",
+    ROUND_START: "roundStart",
+    ROUND_OVER: "roundOver",
+    TIME_OVER: "timeOver",
 
     channel: 'MatchVS',
     platform: 'alpha',
@@ -19,7 +22,7 @@ var obj = {
     secret: 'da47754579fa47e4affab5785451622c',
 
     matchType: 1,
-    tagsInfo: {"title": "A"},
+    tagsInfo: { "title": "A" },
     userInfo: null,
     playerUserIds: [],
     playerSet: new Set(),

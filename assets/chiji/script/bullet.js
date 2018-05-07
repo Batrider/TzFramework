@@ -24,13 +24,13 @@ cc.Class({
             }
         } else if (group === 'player') {
             var player = other.node.getComponent('player');
-            if (player && !player.dead && player.camp !== this.hostPlayer.camp) {
+            if (player && !player.isDied && player.camp !== this.hostPlayer.camp) {
                 Game.bulletManger.recycleBullet(this);
                 if (GLB.isRoomOwner) {
                     player.hurt();
                 }
             }
-        } else if (group === "item") {
+        } else if (group === 'item') {
             Game.bulletManger.recycleBullet(this);
             var item = other.node.getComponent('item');
             if (item) {

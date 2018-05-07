@@ -34,8 +34,10 @@ cc.Class({
     // onLoad () {},
 
     start() {
-        this.setTimeout(function() {
-            this.node.destroy();
-        }, 2000);
+        setTimeout(function() {
+            if (this.node) {
+                this.node.destroy();
+            }
+        }.bind(this), 2000);
     }
 });

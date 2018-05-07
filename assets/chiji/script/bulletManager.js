@@ -27,6 +27,9 @@ cc.Class({
     },
 
     scheduleFire: function() {
+        if (Game.GameManager.gameState === GameState.Over || Game.GameManager.gameState === GameState.Pause) {
+            return;
+        }
         var msg = {
             action: GLB.PLAYER_FIRE_EVENT
         };

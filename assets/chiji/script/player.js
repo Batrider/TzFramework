@@ -32,20 +32,24 @@ cc.Class({
         }
     },
 
+    onLoad: function() {
+        this.initPlayerFrame = this.playerSp.spriteFrame;
+    },
+
     init: function(userId) {
         this.gravity = 1500;
         this.currentSpeed = 0;
         this.flySpeed = 800;
+        this.ceilY = 430;
         this.groundY = -580;
         this.userId = userId;
         this.isShield = false;
         this.isTrack = false;
         this.shieldSp.node.active = false;
+        this.playerSp.spriteFrame = this.initPlayerFrame;
         this.anim = this.node.getComponent(cc.Animation);
-
-        if (this.isSelf()) {
-            this.setInputControl();
-        }
+        this.isDied = false;
+        this.beChicken = false;
     },
 
     update: function(dt) {
@@ -53,6 +57,14 @@ cc.Class({
         this.node.y += dt * this.currentSpeed;
         if (this.node.y < this.groundY) {
             this.node.y = this.groundY;
+            if (this.isDied && !this.beChicken) {
+                this.beChicken = true;
+                this.anim.play("chicken");
+            }
+        }
+        if (this.node.y > this.ceilY) {
+            this.node.y = this.ceilY;
+            this.currentSpeed = 0;
         }
     },
 
@@ -117,7 +129,8 @@ cc.Class({
 
     hurt: function() {
         var msg = {
-            action: GLB.PLAYER_HURT_EVENT
+            action: GLB.PLAYER_HURT_EVENT,
+            playerId: this.userId
         };
         var result = mvs.engine.sendEventEx(0, JSON.stringify(msg), 0, GLB.playerUserIds);
         if (result.result !== 0) {
@@ -125,67 +138,41 @@ cc.Class({
         }
     },
 
-    hurtNotify: function(cpProto) {
+    hurtNotify: function() {
+        if (Game.GameManager.gameState !== GameState.Play) {
+            return;
+        }
+
         if (this.isShield) {
             this.setShield(false);
         } else {
-            this.dead = true;
-            // 死亡表现--
-            this.anim.play('dead');
-            this.currentSpeed = -1000;
-            console.log('游戏结束');
+            this.dead();
         }
     },
 
-    fly: function() {
-        if (this.dead) {
-            return;
-        }
-        var msg = {
-            action: GLB.PLAYER_FLY_EVENT,
-            speed: this.flySpeed,
-            y: this.node.y
-        };
-        var result = mvs.engine.sendEventEx(0, JSON.stringify(msg), 0, GLB.playerUserIds);
-        if (result.result !== 0) {
-            console.log("移动事件发送失败", result.result);
-        }
+    dead: function() {
+        this.isDied = true;
+        this.anim.play('dead');
+        this.currentSpeed = -1000;
+        console.log('回合结束');
+        clientEvent.dispatch(clientEvent.eventType.roundOver, { loseCamp: this.camp });
     },
 
-    flyNotify: function(cpProto) {
-        this.currentSpeed = cpProto.speed;
-        // 做插值处理，平滑位置--
-        this.node.y = cpProto.y;
+    flyNotify: function() {
+        this.currentSpeed = this.flySpeed;
         this.anim.play();
         // smoke
+        var smoke = cc.instantiate(this.smokePrefab);
+        var worldPos = this.node.convertToWorldSpaceAR(cc.v2(0, -30));
+        var localPos = this.node.parent.convertToNodeSpaceAR(worldPos);
+        smoke.parent = this.node.parent;
+        smoke.position = localPos;
     },
 
     fireNotify: function() {
-        if (this.dead) {
+        if (this.isDied) {
             return;
         }
         Game.bulletManger.spawnBullet(this);
-    },
-
-    setInputControl: function() {
-        var self = this;
-        cc.eventManager.addListener({
-            event: cc.EventListener.KEYBOARD,
-            onKeyPressed: function(keyCode, event) {
-                switch (keyCode) {
-                    case cc.KEY.space: {
-                        self.fly();
-                        break;
-                    }
-                }
-            }
-        }, self.node);
-    },
-
-    isSelf: function() {
-        if (GLB.userInfo.id === this.userId) {
-            return true;
-        }
-        return false;
-    },
+    }
 });

@@ -44,13 +44,6 @@ cc.Class({
         }
     },
 
-    startGame: function() {
-        console.log('游戏即将开始');
-        cc.director.loadScene('game', function() {
-            uiFunc.openUI("uiGamePanel");
-        });
-    },
-
     joinRoomResponse: function(status, userInfoList, roomInfo) {
         if (status !== 200) {
             console.log('进入房间失败,异步回调错误码: ' + status);
@@ -180,7 +173,7 @@ cc.Class({
 
         if (event && event.action === GLB.GAME_START_EVENT) {
             delete GLB.events[info.sequence]
-            this.startGame();
+            Game.GameManager.startGame();
         }
     },
 
@@ -195,7 +188,7 @@ cc.Class({
             JSON.parse(info.cpProto).userIds.forEach(function(userId) {
                 if (userId !== GLB.userInfo.id) GLB.playerUserIds.push(userId);
             });
-            this.startGame();
+            Game.GameManager.startGame();
         }
     }
 });

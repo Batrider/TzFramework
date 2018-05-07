@@ -5,12 +5,79 @@ cc.Class({
     extends: cc.Component,
     onLoad() {
         Game.GameManager = this;
+        cc.game.addPersistRootNode(this.node);
         cc.director.getCollisionManager().enabled = true;
         clientEvent.init();
         dataFunc.loadConfigs();
         this.matchVsInit();
         uiFunc.openUI("uiMaskLayout", function() {
         });
+
+        this.friendHearts = 3;
+        this.enemyHearts = 3;
+        this.curRound = 1;
+        this.gameState = GameState.None;
+
+        clientEvent.on(clientEvent.eventType.roundOver, function(data) {
+            this.curRound++;
+            switch (data.loseCamp) {
+                case Camp.Friend:
+                    this.friendHearts -= 1;
+                    break;
+                case Camp.Enemy:
+                    this.enemyHearts -= 1;
+                    break;
+                case Camp.None:
+                    this.enemyHearts -= 1;
+                    this.friendHearts -= 1;
+                    break;
+            }
+            this.roundOver();
+            if (this.enemyHearts <= 0 || this.friendHearts <= 0) {
+                setTimeout(function() {
+                    GLB.isGameOver = true;
+                    this.gameState = GameState.Over;
+                }.bind(this), 2000);
+                this.gameState = GameState.Pause;
+                // 结算界面--
+            } else {
+                // 下一回合--
+                setTimeout(function() {
+                    this.roundStart();
+                    this.gameState = GameState.Play;
+                }.bind(this), 2000);
+                this.gameState = GameState.Pause;
+            }
+        }, this);
+    },
+
+    startGame: function() {
+        console.log('游戏即将开始');
+        cc.director.loadScene('game', function() {
+            uiFunc.openUI("uiGamePanel", function() {
+                this.gameState = GameState.Play;
+            }.bind(this));
+        }.bind(this));
+    },
+
+    roundOver: function() {
+        var msg = {
+            action: GLB.ROUND_OVER
+        };
+        var result = mvs.engine.sendEventEx(0, JSON.stringify(msg), 0, GLB.playerUserIds);
+        if (result.result !== 0) {
+            console.log("回合结束事件发送失败", result.result);
+        }
+    },
+
+    roundStart: function() {
+        var msg = {
+            action: GLB.ROUND_START
+        };
+        var result = mvs.engine.sendEventEx(0, JSON.stringify(msg), 0, GLB.playerUserIds);
+        if (result.result !== 0) {
+            console.log("回合开始事件发送失败", result.result);
+        }
     },
 
     matchVsInit: function() {

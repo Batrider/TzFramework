@@ -3,8 +3,10 @@ window.Game = {
     gameManager: null,
     bulletManger: null,
     itemManager: null,
+
     fireInterval: 2,
-    itemInterval: 5
+    itemInterval: 5,
+    roundSeconds: 30
 }
 
 window.Camp = cc.Enum({
@@ -17,4 +19,11 @@ window.ItemType = cc.Enum({
     None: 0,
     Shield: 1,
     Track: 2
+})
+
+window.GameState = cc.Enum({
+    None: 0,
+    Pause: 1,
+    Play: 2,
+    Over: 3
 })
