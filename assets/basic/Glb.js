@@ -1,7 +1,7 @@
 var obj = {
     RANDOM_MATCH: 1,  // 随机匹配
     PROPERTY_MATCH: 2,  // 属性匹配
-    MAX_PLAYER_COUNT: 2,
+    MAX_PLAYER_COUNT: 4,
     GAME_START_EVENT: "gameStart",
     NEW_ITEM_EVENT: "newItem",
     PLAYER_FLY_EVENT: "playerFly",

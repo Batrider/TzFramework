@@ -13,6 +13,15 @@ cc.Class({
         var worldPos = hostPlayer.firePoint.convertToWorldSpaceAR(cc.v2(0, 0));
         var bulletPoint = this.node.parent.convertToNodeSpaceAR(worldPos);
         this.node.position = bulletPoint;
+        this.node.rotation = 0;
+        this.speedY = 0;
+        var uiGamePanel = uiFunc.findUI("uiGamePanel");
+        if (uiGamePanel) {
+            var gamePanelScript = uiGamePanel.getComponent("uiGamePanel");
+            if (gamePanelScript) {
+                this.players = gamePanelScript.players;
+            }
+        }
     },
 
     onCollisionEnter: function(other) {
@@ -43,9 +52,61 @@ cc.Class({
     },
 
     update(dt) {
-        this.node.setPositionX(this.node.position.x + (this.speed * dt));
-        if (this.node.position.y < -1000 || Math.abs(this.node.position.x) > 1000) {
+        if (this.hostPlayer.isTrack && this.players) {
+            var targetPlayer = null;
+            var playerScript = null;
+            var minDistance = Number.MAX_VALUE;
+            for (var i = 0; i < this.players.length; i++) {
+                playerScript = this.players[i].getComponent('player');
+                if (playerScript && playerScript.camp !== this.hostPlayer.camp) {
+                    var selfPos = this.node.convertToWorldSpaceAR(cc.v2(0, 0));
+                    var targetPos = playerScript.node.convertToWorldSpaceAR(cc.v2(0, 0));
+                    var distance = cc.pDistance(selfPos, targetPos);
+                    if (distance < minDistance) {
+                        targetPlayer = this.players[i];
+                    }
+                }
+            }
+            if (targetPlayer) {
+                // 跟踪目标--
+                playerScript = targetPlayer.getComponent('player');
+                var pos;
+                if (playerScript.camp === Camp.Enemy) {
+                    pos = cc.v2(this.node.x - targetPlayer.x, this.node.y - targetPlayer.y);
+                } else {
+                    pos = cc.v2(targetPlayer.x - this.node.x, targetPlayer.y - this.node.y);
+                }
+                var rad = cc.pAngleSigned(pos, cc.v2(-1, 0));
+                var angle = (180 / Math.PI) * rad;
+
+                if (angle > 60) {
+                    angle = 60;
+                }
+                if (angle < -60) {
+                    angle = -60;
+                }
+
+                var rotation = cc.lerp(this.node.rotation, angle, dt);
+                this.node.rotation = rotation;
+
+                if (Math.abs(this.node.y - targetPlayer.y) > 1) {
+                    if (this.node.y > targetPlayer.y) {
+                        this.speedY -= Math.abs(this.speed * dt);
+                    } else {
+                        this.speedY += Math.abs(this.speed * dt);
+                    }
+                    this.node.setPositionY(this.node.position.y + (this.speedY * dt));
+                }
+                this.node.setPositionX(this.node.position.x + (this.speed * dt));
+            } else {
+                this.node.setPositionX(this.node.position.x + (this.speed * dt));
+            }
+        } else {
+            this.node.setPositionX(this.node.position.x + (this.speed * dt));
+        }
+        if (Math.abs(this.node.position.x) > 360) {
             Game.bulletManger.recycleBullet(this);
         }
     }
-});
+})
+;

@@ -12,6 +12,10 @@ cc.Class({
             default: null,
             type: cc.Sprite
         },
+        explosionSp: {
+            default: null,
+            type: cc.Sprite
+        },
         firePoint: {
             default: null,
             type: cc.Node
@@ -39,13 +43,14 @@ cc.Class({
     init: function(userId) {
         this.gravity = 1500;
         this.currentSpeed = 0;
-        this.flySpeed = 800;
+        this.flySpeed = 600;
         this.ceilY = 430;
         this.groundY = -580;
         this.userId = userId;
         this.isShield = false;
         this.isTrack = false;
         this.shieldSp.node.active = false;
+        this.explosionSp.node.active = false;
         this.playerSp.spriteFrame = this.initPlayerFrame;
         this.anim = this.node.getComponent(cc.Animation);
         this.isDied = false;
@@ -71,7 +76,8 @@ cc.Class({
     getItem: function(itemType) {
         var msg = {
             action: GLB.PLAYER_GET_ITEM_EVENT,
-            itemType: itemType
+            itemType: itemType,
+            playerId: this.userId
         };
         var result = mvs.engine.sendEventEx(0, JSON.stringify(msg), 0, GLB.playerUserIds);
         if (result.result !== 0) {
@@ -95,7 +101,7 @@ cc.Class({
 
     setShield: function(active) {
         this.isShield = active;
-        this.shieldSp.active = active;
+        this.shieldSp.node.active = active;
     },
 
     setTrack: function(active) {
@@ -147,15 +153,23 @@ cc.Class({
             this.setShield(false);
         } else {
             this.dead();
+            clientEvent.dispatch(clientEvent.eventType.playerDead, { playerId: this.userId });
         }
     },
 
     dead: function() {
         this.isDied = true;
+        this.shieldSp.node.active = false;
         this.anim.play('dead');
         this.currentSpeed = -1000;
-        console.log('回合结束');
-        clientEvent.dispatch(clientEvent.eventType.roundOver, { loseCamp: this.camp });
+        if (Math.abs(this.node.y - this.groundY) < 5) {
+            if (this.isDied && !this.beChicken) {
+                this.beChicken = true;
+                setTimeout(function() {
+                    this.anim.play("chicken");
+                }.bind(this), 1000);
+            }
+        }
     },
 
     flyNotify: function() {
@@ -163,10 +177,12 @@ cc.Class({
         this.anim.play();
         // smoke
         var smoke = cc.instantiate(this.smokePrefab);
-        var worldPos = this.node.convertToWorldSpaceAR(cc.v2(0, -30));
-        var localPos = this.node.parent.convertToNodeSpaceAR(worldPos);
-        smoke.parent = this.node.parent;
-        smoke.position = localPos;
+        if (smoke) {
+            var worldPos = this.node.convertToWorldSpaceAR(cc.v2(0, -30));
+            var localPos = this.node.parent.convertToNodeSpaceAR(worldPos);
+            smoke.parent = this.node.parent;
+            smoke.position = localPos;
+        }
     },
 
     fireNotify: function() {

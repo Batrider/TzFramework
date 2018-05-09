@@ -49,35 +49,28 @@ cc.Class({
                 this.gameState = GameState.Pause;
             }
         }, this);
+
+        mvs.response.sendEventNotify = this.sendEventNotify.bind(this);
     },
 
     startGame: function() {
-        console.log('游戏即将开始');
         cc.director.loadScene('game', function() {
             uiFunc.openUI("uiGamePanel", function() {
-                this.gameState = GameState.Play;
+                if (GLB.isRoomOwner) {
+                    this.sendRoundStartMsg();
+                }
             }.bind(this));
         }.bind(this));
     },
 
-    roundOver: function() {
-        var msg = {
-            action: GLB.ROUND_OVER
-        };
-        var result = mvs.engine.sendEventEx(0, JSON.stringify(msg), 0, GLB.playerUserIds);
-        if (result.result !== 0) {
-            console.log("回合结束事件发送失败", result.result);
-        }
+    sendRoundOverMsg: function() {
+        var msg = { action: GLB.ROUND_OVER };
+        this.sendEventEx(msg);
     },
 
-    roundStart: function() {
-        var msg = {
-            action: GLB.ROUND_START
-        };
-        var result = mvs.engine.sendEventEx(0, JSON.stringify(msg), 0, GLB.playerUserIds);
-        if (result.result !== 0) {
-            console.log("回合开始事件发送失败", result.result);
-        }
+    sendRoundStartMsg: function() {
+        var msg = { action: GLB.ROUND_START };
+        this.sendEventEx(msg);
     },
 
     matchVsInit: function() {
@@ -130,5 +123,78 @@ cc.Class({
 
     lobbyShow: function() {
         uiFunc.openUI("uiLobbyPanel");
+    },
+
+    // 玩家行为通知--
+    sendEventNotify: function(info) {
+        var cpProto = JSON.parse(info.cpProto);
+
+        var player = null;
+        if (info.cpProto.indexOf(GLB.PLAYER_FLY_EVENT) >= 0) {
+            player = this.getPlayerByUserId(info.srcUserId);
+            if (player) {
+                player.flyNotify();
+            }
+        }
+
+        if (info.cpProto.indexOf(GLB.PLAYER_FIRE_EVENT) >= 0) {
+            for (var i = 0; i < GLB.playerUserIds.length; i++) {
+                player = this.getPlayerByUserId(GLB.playerUserIds[i]);
+                if (player) {
+                    player.fireNotify();
+                }
+            }
+        }
+
+        if (info.cpProto.indexOf(GLB.NEW_ITEM_EVENT) >= 0) {
+            Game.itemManager.spawnItemNotify(cpProto);
+        }
+
+        if (info.cpProto.indexOf(GLB.PLAYER_GET_ITEM_EVENT) >= 0) {
+            player = this.getPlayerByUserId(cpProto.playerId);
+            if (player) {
+                player.getItemNotify(cpProto);
+            }
+        }
+
+        if (info.cpProto.indexOf(GLB.PLAYER_REMOVE_ITEM_EVENT) >= 0) {
+            player = this.getPlayerByUserId(info.srcUserId);
+            if (player) {
+                player.removeItemNotify(cpProto);
+            }
+        }
+
+        if (info.cpProto.indexOf(GLB.PLAYER_HURT_EVENT) >= 0) {
+            player = this.getPlayerByUserId(cpProto.playerId);
+            if (player) {
+                player.hurtNotify();
+            }
+        }
+
+        if (info.cpProto.indexOf(GLB.ROUND_OVER) >= 0) {
+            clientEvent.dispatch(clientEvent.eventType.roundOver, { loseCamp: Camp.None });
+        }
+
+        if (info.cpProto.indexOf(GLB.ROUND_START) >= 0) {
+            clientEvent.dispatch(clientEvent.eventType.roundStart);
+        }
+
+        if (info.cpProto.indexOf(GLB.TIME_OVER) >= 0) {
+            for (var m = 0; m < GLB.playerUserIds.length; m++) {
+                player = this.getPlayerByUserId(GLB.playerUserIds[m]);
+                if (player) {
+                    player.dead();
+                }
+            }
+            clientEvent.dispatch(clientEvent.eventType.roundOver, { loseCamp: Camp.None });
+        }
+    },
+
+    sendEventEx: function(msg) {
+        var result = mvs.engine.sendEventEx(0, JSON.stringify(msg), 0, GLB.playerUserIds);
+        if (result.result !== 0) {
+            console.log(msg.action, result.result);
+        }
     }
+
 });

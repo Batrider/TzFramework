@@ -1,11 +1,11 @@
 window.Game = {
-    duckManger: null,
-    gameManager: null,
-    bulletManger: null,
-    itemManager: null,
+    GameManager: null,
+    BulletManger: null,
+    ItemManager: null,
+    PlayerManger: null,
 
-    fireInterval: 2,
-    itemInterval: 5,
+    fireInterval: 1500,
+    itemInterval: 8000,
     roundSeconds: 30
 }
 

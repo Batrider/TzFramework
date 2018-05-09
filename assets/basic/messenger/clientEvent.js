@@ -4,7 +4,9 @@ window.clientEvent = {
         closeUI: "closeUI",
         gameStart: "gameStart",
         gameOver: "gameOver",
-        roundOver: "roundOver"
+        roundOver: "roundOver",
+        roundStart: "roundStart",
+        playerDead: "playerDead"
     },
     eventListener: null
 }

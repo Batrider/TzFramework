@@ -15,30 +15,31 @@ cc.Class({
     },
 
     onLoad() {
-        Game.bulletManger = this;
-        // 己方子弹--
+        Game.BulletManger = this;
+        // 子弹池--
         this.friendBulletPool = new cc.NodePool();
-        // 敌方子弹--
         this.enemyBulletPool = new cc.NodePool();
+        clientEvent.on(clientEvent.eventType.roundStart, this.scheduleFire, this);
+        clientEvent.on(clientEvent.eventType.roundOver, this.clearScheduleFire, this);
+    },
 
-        if (GLB.isRoomOwner) {
-            this.schedule(this.scheduleFire.bind(this), Game.fireInterval);
-        }
+    clearScheduleFire: function() {
+        clearInterval(this.scheduleFireID);
     },
 
     scheduleFire: function() {
-        if (Game.GameManager.gameState === GameState.Over || Game.GameManager.gameState === GameState.Pause) {
-            return;
-        }
-        var msg = {
-            action: GLB.PLAYER_FIRE_EVENT
-        };
-        var result = mvs.engine.sendEventEx(0, JSON.stringify(msg), 0, GLB.playerUserIds);
-        if (result.result !== 0) {
-            console.log(" 定时开火事件发送失败", result.result);
+        if (GLB.isRoomOwner) {
+            this.scheduleFireID = setInterval(function() {
+                if (Game.GameManager.gameState === GameState.Over || Game.GameManager.gameState === GameState.Pause) {
+                    return;
+                }
+                var msg = {
+                    action: GLB.PLAYER_FIRE_EVENT
+                };
+                Game.GameManager.sendEventEx(msg);
+            }.bind(this), Game.fireInterval);
         }
     },
-
 
     spawnBullet: function(hostPlayer) {
         var bulletObj = null;
@@ -67,5 +68,9 @@ cc.Class({
         } else {
             this.friendBulletPool.put(bulletScript.node);
         }
+    },
+
+    onDestroy: function() {
+        clientEvent.off(clientEvent.eventType.roundStart, this.scheduleFire, this);
     }
 });

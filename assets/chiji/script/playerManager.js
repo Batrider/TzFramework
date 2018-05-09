@@ -12,31 +12,71 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        player1: {
-            default: null,
-            type: cc.Prefab
-        },
-        player2: {
-            default: null,
-            type: cc.Prefab
-        },
-        enemy1: {
-            default: null,
-            type: cc.Prefab
-        },
-        enemy2: {
-            default: null,
-            type: cc.Prefab
+        friendPrefabs: [cc.Prefab],
+        enemyPrefabs: [cc.Prefab],
+        friendPosX: 0,
+        enemyPosX: 0
+    },
+
+    onLoad() {
+        Game.PlayerManger = this;
+        clientEvent.on(clientEvent.eventType.roundStart, this.initPlayers, this);
+    },
+
+    // 初始化玩家--
+    initPlayers: function() {
+        var uiGamePanel = uiFunc.findUI("uiGamePanel");
+        if (!uiGamePanel) {
+            return;
+        }
+        var playerScript = null;
+        if (this.players) {
+            for (var j = 0; j < this.players.length; j++) {
+                playerScript = this.players[j].getComponent("player");
+                if (playerScript) {
+                    if (playerScript.camp === Camp.Friend) {
+                        playerScript.position = cc.v2(this.friendPosX, -500);
+                    } else {
+                        playerScript.position = cc.v2(this.enemyPosX, -500);
+                    }
+                    playerScript.init(playerScript.userId);
+                }
+            }
+        } else {
+            var player = null;
+            this.players = [];
+            var campFlg = GLB.playerUserIds.length / 2;
+            for (var i = 0; i < GLB.playerUserIds.length; i++) {
+                if (i < campFlg) {
+                    // 友方
+                    player = cc.instantiate(this.friendPrefabs[i]);
+                    player.parent = uiGamePanel;
+                    player.position = cc.v2(this.friendPosX, -500);
+                } else {
+                    // 敌方
+                    player = cc.instantiate(this.enemyPrefabs[i - campFlg]);
+                    player.parent = uiGamePanel;
+                    player.position = cc.v2(this.enemyPosX, -500);
+                }
+                playerScript = player.getComponent("player");
+                if (playerScript) {
+                    playerScript.init(GLB.playerUserIds[i]);
+                }
+                this.players.push(player);
+            }
         }
     },
 
-    // LIFE-CYCLE CALLBACKS:
+    getPlayerByUserId: function(userId) {
+        for (var i = 0; i < GLB.playerUserIds.length; i++) {
+            if (GLB.playerUserIds[i] === userId && this.players && this.players[i]) {
+                return this.players[i].getComponent("player");
+            }
+        }
+        return null;
+    },
 
-    // onLoad () {},
-
-    start() {
-        //
+    onDestroy: function() {
+        clientEvent.off(clientEvent.eventType.roundStart, this.initPlayers, this);
     }
-
-    // update (dt) {},
 });
