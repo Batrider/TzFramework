@@ -12,6 +12,10 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        audioClip: {
+            default: null,
+            url: cc.AudioClip
+        },
         _itemType: ItemType.None,
         itemType: {
             get() {
@@ -22,5 +26,8 @@ cc.Class({
             },
             type: ItemType
         }
+    },
+    playGetClip: function() {
+        cc.audioEngine.play(this.audioClip, false, 1);
     }
 });

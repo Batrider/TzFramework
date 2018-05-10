@@ -34,6 +34,15 @@ cc.Class({
             }
             if (this.enemyHearts <= 0 || this.friendHearts <= 0) {
                 // 结算界面--
+                var loseCamp = Camp.None;
+                if (this.enemyHearts <= 0 && this.friendHearts <= 0) {
+                    loseCamp = Camp.None;
+                } else if (this.enemyHearts <= 0) {
+                    loseCamp = Camp.Enemy;
+                } else {
+                    loseCamp = Camp.Friend;
+                }
+                clientEvent.dispatch(clientEvent.eventType.gameOver, {loseCamp: loseCamp});
             } else if (GLB.isRoomOwner) {
                 // 下一回合--
                 setTimeout(function() {
@@ -56,12 +65,12 @@ cc.Class({
     },
 
     sendRoundOverMsg: function(loseCamp) {
-        var msg = { action: GLB.ROUND_OVER, loseCamp: loseCamp };
+        var msg = {action: GLB.ROUND_OVER, loseCamp: loseCamp};
         this.sendEventEx(msg);
     },
 
     sendRoundStartMsg: function() {
-        var msg = { action: GLB.ROUND_START };
+        var msg = {action: GLB.ROUND_START};
         this.sendEventEx(msg);
     },
 
@@ -218,7 +227,7 @@ cc.Class({
                     loseCamp1 = Camp.Friend;
                 }
             }
-            clientEvent.dispatch(clientEvent.eventType.roundOver, { loseCamp: loseCamp1 });
+            clientEvent.dispatch(clientEvent.eventType.roundOver, {loseCamp: loseCamp1});
         }
 
         if (info.cpProto.indexOf(GLB.ROUND_START) >= 0) {
@@ -234,7 +243,7 @@ cc.Class({
                     player.dead();
                 }
             }
-            clientEvent.dispatch(clientEvent.eventType.roundOver, { loseCamp: Camp.None });
+            clientEvent.dispatch(clientEvent.eventType.roundOver, {loseCamp: Camp.None});
         }
     },
 

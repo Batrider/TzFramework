@@ -41,6 +41,7 @@ cc.Class({
                 if (GLB.isRoomOwner) {
                     this.hostPlayer.getItem(item.itemType);
                 }
+                item.playGetClip();
             }
             other.node.destroy();
         }

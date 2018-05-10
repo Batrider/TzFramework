@@ -182,6 +182,9 @@
       "__id__": 1
     },
     "_enabled": true,
+    "audioClip": {
+      "__uuid__": "eb706227-bdf6-4f48-8773-9ea77a7d7105"
+    },
     "_itemType": 1
   },
   {

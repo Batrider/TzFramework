@@ -28,6 +28,10 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
+        deadClip: {
+            default: null,
+            url: cc.AudioClip
+        },
         _camp: Camp.None,
         camp: {
             get() {
@@ -154,8 +158,10 @@ cc.Class({
 
     dead: function() {
         this.isDied = true;
+
         this.shieldSp.node.active = false;
         this.anim.play('dead');
+        cc.audioEngine.play(this.deadClip, false, 1);
         this.currentSpeed = -1000;
         if (Math.abs(this.node.y - this.groundY) < 5) {
             if (this.isDied && !this.beChicken) {

@@ -3,6 +3,17 @@ var GLB = require("Glb");
 var uiPanel = require("uiPanel");
 cc.Class({
     extends: uiPanel,
+    properties: {
+        loseClip: {
+            default: null,
+            url: cc.AudioClip
+        },
+        victoryClip: {
+            default: null,
+            url: cc.AudioClip
+        }
+    },
+
     onLoad() {
         this._super();
         this.playerHearts = this.nodeDict["playerHeartLayout"].children;
@@ -11,6 +22,15 @@ cc.Class({
         this.node.on(cc.Node.EventType.TOUCH_START, this.fly, this);
         clientEvent.on(clientEvent.eventType.roundStart, this.roundStart, this);
         clientEvent.on(clientEvent.eventType.roundOver, this.roundOver, this);
+        clientEvent.on(clientEvent.eventType.gameOver, this.gameOver, this);
+    },
+
+    gameOver: function(data) {
+        if (data.loseCamp === Camp.Friend) {
+            cc.audioEngine.play(this.victoryClip, false, 1);
+        } else {
+            cc.audioEngine.play(this.loseClip, false, 1);
+        }
     },
 
     roundStart: function() {
@@ -19,6 +39,7 @@ cc.Class({
         var curRound = Game.GameManager.curRound;
         this.nodeDict['roundCntLb'].getComponent(cc.Label).string = curRound.toString();
         this.nodeDict['roundStart'].getComponent(cc.Animation).play();
+        this.nodeDict['roundStart'].getComponent(cc.AudioSource).play();
     },
 
     countDown: function() {
