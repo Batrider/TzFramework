@@ -123,13 +123,21 @@
     "playOnLoad": true
   },
   {
-    "__type__": "b559b6fxURItJunpVK3uYqF",
+    "__type__": "cc.AudioSource",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 1
     },
-    "_enabled": true
+    "_enabled": true,
+    "_clip": {
+      "__uuid__": "ea22f704-7e37-4d36-8785-8bfde6238fa3"
+    },
+    "_volume": 1,
+    "_mute": false,
+    "_loop": false,
+    "playOnLoad": true,
+    "preload": false
   },
   {
     "__type__": "cc.PrefabInfo",

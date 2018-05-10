@@ -16,6 +16,10 @@ cc.Class({
             default: null,
             type: cc.Sprite
         },
+        diedEffect: {
+            default: null,
+            type: cc.Node
+        },
         firePoint: {
             default: null,
             type: cc.Node
@@ -49,6 +53,7 @@ cc.Class({
         this.userId = userId;
         this.isShield = false;
         this.isTrack = false;
+        this.diedEffect.active = false;
         this.shieldSp.node.active = false;
         this.explosionSp.node.active = false;
         this.playerSp.spriteFrame = this.initPlayerFrame;
@@ -153,7 +158,6 @@ cc.Class({
             this.setShield(false);
         } else {
             this.dead();
-            clientEvent.dispatch(clientEvent.eventType.playerDead, { playerId: this.userId });
         }
     },
 
@@ -189,6 +193,6 @@ cc.Class({
         if (this.isDied) {
             return;
         }
-        Game.bulletManger.spawnBullet(this);
+        Game.BulletManager.spawnBullet(this);
     }
 });

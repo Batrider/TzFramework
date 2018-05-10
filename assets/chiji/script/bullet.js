@@ -15,13 +15,7 @@ cc.Class({
         this.node.position = bulletPoint;
         this.node.rotation = 0;
         this.speedY = 0;
-        var uiGamePanel = uiFunc.findUI("uiGamePanel");
-        if (uiGamePanel) {
-            var gamePanelScript = uiGamePanel.getComponent("uiGamePanel");
-            if (gamePanelScript) {
-                this.players = gamePanelScript.players;
-            }
-        }
+        this.players = Game.PlayerManager.players;
     },
 
     onCollisionEnter: function(other) {
@@ -29,18 +23,18 @@ cc.Class({
         if (group === 'bullet') {
             var bullet = other.node.getComponent('bullet');
             if (bullet && bullet.hostPlayer.camp !== this.hostPlayer.camp) {
-                Game.bulletManger.recycleBullet(this);
+                Game.BulletManager.recycleBullet(this);
             }
         } else if (group === 'player') {
             var player = other.node.getComponent('player');
             if (player && !player.isDied && player.camp !== this.hostPlayer.camp) {
-                Game.bulletManger.recycleBullet(this);
+                Game.BulletManager.recycleBullet(this);
                 if (GLB.isRoomOwner) {
                     player.hurt();
                 }
             }
         } else if (group === 'item') {
-            Game.bulletManger.recycleBullet(this);
+            Game.BulletManager.recycleBullet(this);
             var item = other.node.getComponent('item');
             if (item) {
                 if (GLB.isRoomOwner) {
@@ -105,7 +99,7 @@ cc.Class({
             this.node.setPositionX(this.node.position.x + (this.speed * dt));
         }
         if (Math.abs(this.node.position.x) > 360) {
-            Game.bulletManger.recycleBullet(this);
+            Game.BulletManager.recycleBullet(this);
         }
     }
 })

@@ -67,7 +67,7 @@ cc.Class({
         if (Game.GameManager.gameState !== GameState.Play) {
             return;
         }
-        var player = Game.playerManger.getPlayerByUserId(GLB.userInfo.id);
+        var player = Game.PlayerManager.getPlayerByUserId(GLB.userInfo.id);
         if (!player || player.isDied) {
             return;
         }

@@ -1,8 +1,8 @@
 window.Game = {
     GameManager: null,
-    BulletManger: null,
+    BulletManager: null,
     ItemManager: null,
-    PlayerManger: null,
+    PlayerManager: null,
 
     fireInterval: 1500,
     itemInterval: 8000,
@@ -25,5 +25,6 @@ window.GameState = cc.Enum({
     None: 0,
     Pause: 1,
     Play: 2,
-    Over: 3
+    Over: 3,
+    End: 4
 })

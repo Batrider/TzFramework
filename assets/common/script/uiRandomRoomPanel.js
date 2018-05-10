@@ -73,7 +73,6 @@ cc.Class({
             }
         }
 
-        mvs.response.sendEventNotify = this.sendEventNotify.bind(this); // 设置事件接收的回调
         GLB.playerUserIds = userIds;
 
 
@@ -146,49 +145,10 @@ cc.Class({
 
     notifyGameStart: function() {
         GLB.isRoomOwner = true;
-
-        var event = {
+        var msg = {
             action: GLB.GAME_START_EVENT,
             userIds: GLB.playerUserIds
         };
-
-        mvs.response.sendEventResponse = this.sendEventResponse.bind(this); // 设置事件发射之后的回调
-        var result = mvs.engine.sendEvent(JSON.stringify(event));
-        if (result.result !== 0) {
-            console.log('发送游戏开始通知失败，错误码' + result.result);
-        }
-        // 发送的事件要缓存起来，收到异步回调时用于判断是哪个事件发送成功
-        GLB.events[result.sequence] = event;
-        console.log("发起游戏开始的通知，等待回复");
+        Game.GameManager.sendEventEx(msg);
     },
-
-    sendEventResponse: function(info) {
-        if (!info
-            || !info.status
-            || info.status !== 200) {
-            console.log('事件发送失败');
-        }
-
-        var event = GLB.events[info.sequence]
-
-        if (event && event.action === GLB.GAME_START_EVENT) {
-            delete GLB.events[info.sequence]
-            Game.GameManager.startGame();
-        }
-    },
-
-    sendEventNotify: function(info) {
-        if (info
-            && info.cpProto
-            && info.cpProto.indexOf(GLB.GAME_START_EVENT) >= 0) {
-
-            GLB.playerUserIds = [GLB.userInfo.id]
-            // 通过游戏开始的玩家会把userIds传过来，这里找出所有除本玩家之外的用户ID，
-            // 添加到全局变量playerUserIds中
-            JSON.parse(info.cpProto).userIds.forEach(function(userId) {
-                if (userId !== GLB.userInfo.id) GLB.playerUserIds.push(userId);
-            });
-            Game.GameManager.startGame();
-        }
-    }
 });

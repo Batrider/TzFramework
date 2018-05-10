@@ -15,7 +15,7 @@ cc.Class({
     },
 
     onLoad() {
-        Game.BulletManger = this;
+        Game.BulletManager = this;
         // 子弹池--
         this.friendBulletPool = new cc.NodePool();
         this.enemyBulletPool = new cc.NodePool();
@@ -24,15 +24,16 @@ cc.Class({
     },
 
     clearScheduleFire: function() {
-        clearInterval(this.scheduleFireID);
+        if (GLB.isRoomOwner) {
+            clearInterval(this.scheduleFireID);
+        }
     },
 
     scheduleFire: function() {
         if (GLB.isRoomOwner) {
+            console.log("fire")
+            clearInterval(this.scheduleFireID);
             this.scheduleFireID = setInterval(function() {
-                if (Game.GameManager.gameState === GameState.Over || Game.GameManager.gameState === GameState.Pause) {
-                    return;
-                }
                 var msg = {
                     action: GLB.PLAYER_FIRE_EVENT
                 };

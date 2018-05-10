@@ -10,26 +10,29 @@ cc.Class({
 
     onLoad() {
         Game.ItemManager = this;
+        clientEvent.on(clientEvent.eventType.roundStart, this.scheduleSpawnItem, this);
+        clientEvent.on(clientEvent.eventType.roundOver, this.clearScheduleSpawn, this);
+    },
+
+    clearScheduleSpawn: function() {
         if (GLB.isRoomOwner) {
             clearInterval(this.scheduleSpawn);
-            this.scheduleSpawn = setInterval(function() {
-                this.scheduleSpawnItem();
-            }.bind(this), 8000);
         }
     },
 
     scheduleSpawnItem: function() {
-        if (Game.GameManager.gameState === GameState.Over || Game.GameManager.gameState === GameState.Pause) {
-            return;
+        if (GLB.isRoomOwner) {
+            this.scheduleSpawn = setInterval(function() {
+                var index = dataFunc.randomNum(0, this.itemPrefabs.length - 1);
+                var position = cc.v2(0, dataFunc.randomNum(-450, 350));
+                var msg = {
+                    action: GLB.NEW_ITEM_EVENT,
+                    itemIndex: index,
+                    position: position
+                };
+                Game.GameManager.sendEventEx(msg);
+            }.bind(this), 5000);
         }
-        var index = dataFunc.randomNum(0, this.itemPrefabs.length - 1);
-        var position = cc.v2(0, dataFunc.randomNum(-450, 350));
-        var msg = {
-            action: GLB.NEW_ITEM_EVENT,
-            itemIndex: index,
-            position: position
-        };
-        Game.GameManager.sendEventEx(msg);
     },
 
     spawnItemNotify: function(cpProto) {
@@ -46,6 +49,13 @@ cc.Class({
                 this.item.parent = parent;
                 this.item.position = cpProto.position;
             }
+        }
+    },
+
+    onDestroy: function() {
+        if (GLB.isRoomOwner) {
+            clientEvent.off(clientEvent.eventType.roundStart, this.scheduleSpawnItem, this);
+            clientEvent.off(clientEvent.eventType.roundOver, this.clearScheduleSpawn, this);
         }
     }
 });
