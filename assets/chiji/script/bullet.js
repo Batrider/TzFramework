@@ -7,10 +7,11 @@ cc.Class({
         speed: 0
     },
 
-    init: function(hostPlayer) {
+    init: function(hostPlayer, index, total) {
+        var offset = (index - ((total + 1) / 2)) * 40;
         this.hostPlayer = hostPlayer;
         this.node.parent = hostPlayer.node.parent;
-        var worldPos = hostPlayer.firePoint.convertToWorldSpaceAR(cc.v2(0, 0));
+        var worldPos = hostPlayer.firePoint.convertToWorldSpaceAR(cc.v2(0, offset));
         var bulletPoint = this.node.parent.convertToNodeSpaceAR(worldPos);
         this.node.position = bulletPoint;
         this.node.rotation = 0;

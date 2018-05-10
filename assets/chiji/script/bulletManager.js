@@ -43,22 +43,25 @@ cc.Class({
     },
 
     spawnBullet: function(hostPlayer) {
-        var bulletObj = null;
-        if (hostPlayer.camp === Camp.Enemy) {
-            bulletObj = this.enemyBulletPool.get()
-            if (!bulletObj) {
-                bulletObj = cc.instantiate(this.enemyBulletPrefab);
+        var bulletCnt = Game.GameManager.curRound > 3 ? 3 : Game.GameManager.curRound;
+        for (var i = 0; i < bulletCnt; i++) {
+            var bulletObj = null;
+            if (hostPlayer.camp === Camp.Enemy) {
+                bulletObj = this.enemyBulletPool.get()
+                if (!bulletObj) {
+                    bulletObj = cc.instantiate(this.enemyBulletPrefab);
+                }
+            } else {
+                bulletObj = this.friendBulletPool.get()
+                if (!bulletObj) {
+                    bulletObj = cc.instantiate(this.friendBulletPrefab);
+                }
             }
-        } else {
-            bulletObj = this.friendBulletPool.get()
-            if (!bulletObj) {
-                bulletObj = cc.instantiate(this.friendBulletPrefab);
-            }
-        }
-        if (bulletObj) {
-            var bulletScript = bulletObj.getComponent('bullet');
-            if (bulletScript) {
-                bulletScript.init(hostPlayer);
+            if (bulletObj) {
+                var bulletScript = bulletObj.getComponent('bullet');
+                if (bulletScript) {
+                    bulletScript.init(hostPlayer, i + 1, bulletCnt);
+                }
             }
         }
     },

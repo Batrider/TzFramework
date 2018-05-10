@@ -190,16 +190,19 @@ cc.Class({
         }
 
         if (info.cpProto.indexOf(GLB.PLAYER_HURT_EVENT) >= 0) {
-            player = Game.PlayerManager.getPlayerByUserId(cpProto.playerId);
-            if (player) {
-                player.hurtNotify();
-            }
+            if (Game.GameManager.gameState !== GameState.Over) {
+                player = Game.PlayerManager.getPlayerByUserId(cpProto.playerId);
+                if (player) {
+                    player.hurtNotify();
+                }
 
-            // 检查回合结束--
-            if (GLB.isRoomOwner) {
+                // 检查回合结束--
                 var loseCamp = Game.PlayerManager.getLoseCamp();
                 if (loseCamp != null) {
-                    this.sendRoundOverMsg(loseCamp);
+                    Game.GameManager.gameState = GameState.Over
+                    if (GLB.isRoomOwner) {
+                        this.sendRoundOverMsg(loseCamp);
+                    }
                 }
             }
         }

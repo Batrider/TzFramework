@@ -84,10 +84,7 @@ cc.Class({
             itemType: itemType,
             playerId: this.userId
         };
-        var result = mvs.engine.sendEventEx(0, JSON.stringify(msg), 0, GLB.playerUserIds);
-        if (result.result !== 0) {
-            console.log("获得物品事件发送失败", result.result);
-        }
+        Game.GameManager.sendEventEx(msg);
     },
 
     getItemNotify: function(cpProto) {
@@ -118,10 +115,7 @@ cc.Class({
             action: GLB.PLAYER_REMOVE_ITEM_EVENT,
             itemType: itemType
         };
-        var result = mvs.engine.sendEventEx(0, JSON.stringify(msg), 0, GLB.playerUserIds);
-        if (result.result !== 0) {
-            console.log("移除物品事件发送失败", result.result);
-        }
+        Game.GameManager.sendEventEx(msg);
     },
 
     removeItemNotify: function(cpProto) {
@@ -143,10 +137,7 @@ cc.Class({
             action: GLB.PLAYER_HURT_EVENT,
             playerId: this.userId
         };
-        var result = mvs.engine.sendEventEx(0, JSON.stringify(msg), 0, GLB.playerUserIds);
-        if (result.result !== 0) {
-            console.log("受伤事件发送失败", result.result);
-        }
+        Game.GameManager.sendEventEx(msg);
     },
 
     hurtNotify: function() {
