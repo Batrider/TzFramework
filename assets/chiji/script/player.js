@@ -174,6 +174,9 @@ cc.Class({
     },
 
     flyNotify: function() {
+        if (this.isDied === true) {
+            return;
+        }
         this.currentSpeed = this.flySpeed;
         this.anim.play();
         // smoke
@@ -186,10 +189,10 @@ cc.Class({
         }
     },
 
-    fireNotify: function() {
+    fireNotify: function(bulletPointY) {
         if (this.isDied) {
             return;
         }
-        Game.BulletManager.spawnBullet(this);
+        Game.BulletManager.spawnBullet(this, bulletPointY);
     }
 });

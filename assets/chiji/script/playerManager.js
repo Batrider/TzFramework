@@ -28,7 +28,7 @@ cc.Class({
                 }
             }
         }
-        if (enemyDiedCnt > this.players.length / 2 || friendDiedCnt > this.players.length / 2) {
+        if (enemyDiedCnt >= this.players.length / 2 || friendDiedCnt >= this.players.length / 2) {
             return true;
         }
         return false;
@@ -99,6 +99,7 @@ cc.Class({
                 }
                 this.players.push(player);
             }
+            this.players[0].setLocalZOrder(999);
         }
     },
 

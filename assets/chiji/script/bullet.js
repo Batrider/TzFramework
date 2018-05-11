@@ -7,13 +7,13 @@ cc.Class({
         speed: 0
     },
 
-    init: function(hostPlayer, index, total) {
+    init: function(hostPlayer, index, total, bulletPointY) {
         var offset = (index - ((total + 1) / 2)) * 40;
         this.hostPlayer = hostPlayer;
         this.node.parent = hostPlayer.node.parent;
-        var worldPos = hostPlayer.firePoint.convertToWorldSpaceAR(cc.v2(0, offset));
-        var bulletPoint = this.node.parent.convertToNodeSpaceAR(worldPos);
-        this.node.position = bulletPoint;
+        var worldPos = hostPlayer.firePoint.convertToWorldSpaceAR(cc.v2(0, 0));
+        var bulletPoint = hostPlayer.node.parent.convertToNodeSpaceAR(worldPos);
+        this.node.position = cc.v2(bulletPoint.x, bulletPointY + offset);
         this.node.rotation = 0;
         this.speedY = 0;
         this.players = Game.PlayerManager.players;

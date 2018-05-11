@@ -42,7 +42,7 @@ cc.Class({
                 } else {
                     loseCamp = Camp.Friend;
                 }
-                clientEvent.dispatch(clientEvent.eventType.gameOver, {loseCamp: loseCamp});
+                clientEvent.dispatch(clientEvent.eventType.gameOver, { loseCamp: loseCamp });
             } else if (GLB.isRoomOwner) {
                 // 下一回合--
                 setTimeout(function() {
@@ -65,12 +65,12 @@ cc.Class({
     },
 
     sendRoundOverMsg: function(loseCamp) {
-        var msg = {action: GLB.ROUND_OVER, loseCamp: loseCamp};
+        var msg = { action: GLB.ROUND_OVER, loseCamp: loseCamp };
         this.sendEventEx(msg);
     },
 
     sendRoundStartMsg: function() {
-        var msg = {action: GLB.ROUND_START};
+        var msg = { action: GLB.ROUND_START };
         this.sendEventEx(msg);
     },
 
@@ -141,14 +141,14 @@ cc.Class({
             var index;
             for (index = 0; index < remoteUserIds.length; index++) {
                 if (GLB.userInfo.id === remoteUserIds[index]) {
-                    selfCamp = index / 2;
+                    selfCamp = Math.floor(index / 2);
                     break;
                 }
             }
             this.enemyIds = [];
             this.friendIds = [GLB.userInfo.id];
             for (index = 0; index < remoteUserIds.length; index++) {
-                var camp = index / 2;
+                var camp = Math.floor(index / 2);
                 if (camp === selfCamp) {
                     if (remoteUserIds[index] !== GLB.userInfo.id) {
                         this.friendIds.push(remoteUserIds[index]);
@@ -158,6 +158,7 @@ cc.Class({
                 }
             }
             GLB.playerUserIds = this.friendIds.concat(this.enemyIds);
+            console.log("remoteUserIds:" + remoteUserIds);
             console.log("GLB.playerUserIds:" + GLB.playerUserIds);
 
             this.startGame();
@@ -175,7 +176,11 @@ cc.Class({
             for (var i = 0; i < GLB.playerUserIds.length; i++) {
                 player = Game.PlayerManager.getPlayerByUserId(GLB.playerUserIds[i]);
                 if (player) {
-                    player.fireNotify();
+                    for (var j = 0; j < cpProto.data.length; j++) {
+                        if (cpProto.data[j].playerId === player.userId) {
+                            player.fireNotify(cpProto.data[j].bulletPointY);
+                        }
+                    }
                 }
             }
         }
@@ -227,7 +232,7 @@ cc.Class({
                     loseCamp1 = Camp.Friend;
                 }
             }
-            clientEvent.dispatch(clientEvent.eventType.roundOver, {loseCamp: loseCamp1});
+            clientEvent.dispatch(clientEvent.eventType.roundOver, { loseCamp: loseCamp1 });
         }
 
         if (info.cpProto.indexOf(GLB.ROUND_START) >= 0) {
@@ -243,7 +248,7 @@ cc.Class({
                     player.dead();
                 }
             }
-            clientEvent.dispatch(clientEvent.eventType.roundOver, {loseCamp: Camp.None});
+            clientEvent.dispatch(clientEvent.eventType.roundOver, { loseCamp: Camp.None });
         }
     },
 

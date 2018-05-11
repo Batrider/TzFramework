@@ -34,15 +34,25 @@ cc.Class({
             console.log("fire")
             clearInterval(this.scheduleFireID);
             this.scheduleFireID = setInterval(function() {
+                var data = [];
+                for (var j = 0; j < Game.PlayerManager.players.length; j++) {
+                    var playerScript = Game.PlayerManager.players[j].getComponent("player");
+                    if (playerScript) {
+                        var worldPos = playerScript.firePoint.convertToWorldSpaceAR(cc.v2(0, 0));
+                        var bulletPoint = playerScript.node.parent.convertToNodeSpaceAR(worldPos);
+                        data.push({ playerId: playerScript.userId, bulletPointY: bulletPoint.y });
+                    }
+                }
                 var msg = {
-                    action: GLB.PLAYER_FIRE_EVENT
+                    action: GLB.PLAYER_FIRE_EVENT,
+                    data: data
                 };
                 Game.GameManager.sendEventEx(msg);
             }.bind(this), Game.fireInterval);
         }
     },
 
-    spawnBullet: function(hostPlayer) {
+    spawnBullet: function(hostPlayer, bulletPointY) {
         var bulletCnt = Game.GameManager.curRound > 3 ? 3 : Game.GameManager.curRound;
         for (var i = 0; i < bulletCnt; i++) {
             var bulletObj = null;
@@ -60,7 +70,7 @@ cc.Class({
             if (bulletObj) {
                 var bulletScript = bulletObj.getComponent('bullet');
                 if (bulletScript) {
-                    bulletScript.init(hostPlayer, i + 1, bulletCnt);
+                    bulletScript.init(hostPlayer, i + 1, bulletCnt, bulletPointY);
                 }
             }
         }

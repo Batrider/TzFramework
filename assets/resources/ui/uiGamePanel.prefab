@@ -69,8 +69,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 640,
-      "y": 380
+      "x": 360,
+      "y": 640
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -343,7 +343,7 @@
     },
     "_fillStart": 0,
     "_fillRange": 0,
-    "_isTrimmedMode": true,
+    "_isTrimmedMode": false,
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_atlas": null
@@ -2413,10 +2413,10 @@
     "isAlignOnce": true,
     "_target": null,
     "_alignFlags": 45,
-    "_left": 280,
-    "_right": 280,
-    "_top": -260,
-    "_bottom": -260,
+    "_left": 0,
+    "_right": 0,
+    "_top": 0,
+    "_bottom": 0,
     "_verticalCenter": 0,
     "_horizontalCenter": 0,
     "_isAbsLeft": true,
