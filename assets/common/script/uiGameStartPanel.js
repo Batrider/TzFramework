@@ -15,9 +15,11 @@ cc.Class({
         this.pictureNode = this.node.getChildByName("picture");
         this.sprite = this.pictureNode.getComponent(cc.Sprite);
         this.animation = this.node.getComponent(cc.Animation);
+        this.callback = null;
     },
 
-    init () {
+    init (param) {
+        this.callback = param.callback;
         this.count = 0;
         this.countDown();
         this.time = setInterval(this.countDown.bind(this), 1000);

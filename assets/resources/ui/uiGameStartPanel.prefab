@@ -130,7 +130,7 @@
     },
     "_enabled": true,
     "_spriteFrame": {
-      "__uuid__": "fa9c3a70-3295-4361-a73f-5fb283bdf30e"
+      "__uuid__": "082b2672-d4b2-4720-8fee-5ad44c534a7b"
     },
     "_type": 0,
     "_sizeMode": 1,
@@ -171,13 +171,13 @@
     "isUseMask": false,
     "pictures": [
       {
-        "__uuid__": "fa9c3a70-3295-4361-a73f-5fb283bdf30e"
+        "__uuid__": "082b2672-d4b2-4720-8fee-5ad44c534a7b"
       },
       {
         "__uuid__": "259a2cf1-b631-42a4-a44d-7179aff8b1cd"
       },
       {
-        "__uuid__": "082b2672-d4b2-4720-8fee-5ad44c534a7b"
+        "__uuid__": "fa9c3a70-3295-4361-a73f-5fb283bdf30e"
       },
       {
         "__uuid__": "0fc0b598-4180-4e73-abbf-be43b44e5c4e"

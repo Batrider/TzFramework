@@ -3,7 +3,9 @@ window.clientEvent = {
         openUI: "openUI",
         closeUI: "closeUI",
         gameStart: "gameStart",
-        gameOver: "gameOver"
+        gameOver: "gameOver",
+        correctEvent: "correctEvent",
+        mistakeEvent: "mistakeEvent",
     },
     eventListener: null
 }
