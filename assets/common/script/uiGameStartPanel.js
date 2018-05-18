@@ -28,6 +28,7 @@ cc.Class({
     countDown () {
         if (this.count >= 4) {
             uiFunc.closeUI("uiGameStartPanel");
+            this.callback();
             clearInterval(this.time);
             return;
         }

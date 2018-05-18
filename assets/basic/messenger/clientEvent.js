@@ -6,6 +6,7 @@ window.clientEvent = {
         gameOver: "gameOver",
         correctEvent: "correctEvent",
         mistakeEvent: "mistakeEvent",
+        addScore: "addScore"
     },
     eventListener: null
 }

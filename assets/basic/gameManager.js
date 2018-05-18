@@ -8,16 +8,16 @@ cc.Class({
 
     onLoad() {
         clientEvent.init();
-        dataFunc.loadConfigs(null, this.countDown.bind(this));
+        // dataFunc.loadConfigs(null, this.countDown.bind(this));
         this.correctCount = 0;
         this.mistakeCount = 0;
         this.gameState = Game_State.None;
         clientEvent.on(clientEvent.eventType.correctEvent, this.correctEvent.bind(this));
         clientEvent.on(clientEvent.eventType.mistakeEvent, this.mistakeEvent.bind(this));
         clientEvent.on(clientEvent.eventType.gameOver, this.gameOver.bind(this));
-        // uiFunc.openUI("uiFailPanel", function(panel) {
-        //     panel.getComponent("uiFailPanel").init();
-        // }.bind(this));
+        uiFunc.openUI("uiVictoryPanel", function(panel) {
+            panel.getComponent("uiVictoryPanel").init();
+        }.bind(this));
     },
     countDown () {
         uiFunc.openUI("uiGameStartPanel", function(panel) {
@@ -53,7 +53,13 @@ cc.Class({
         this.gameState = Game_State.GameOver;
         var time = new Date().getTime();
         this.setGameOverTime(time);
-        this.gameOverMsgPost();
+        uiFunc.openUI("uiVictoryPanel", function(panel) {
+            var param = {
+                callBack: this.gameOverMsgPost.bind(this)
+            }
+            panel.getComponent("uiVictoryPanel").init(param);
+        }.bind(this));
+        // this.gameOverMsgPost();
     },
     getTotalTime () {
         return (this.gameOverTime - this.gameStartTime) / 1000;
