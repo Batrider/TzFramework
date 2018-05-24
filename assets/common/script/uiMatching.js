@@ -7,7 +7,7 @@ cc.Class({
 
     onLoad() {
         this._super();
-
+        GLB.isRoomOwner = false;
         this.playerIcons = [];
         this.playerModel = this.nodeDict["playerIcon"];
         this.playerModel.active = false;
@@ -151,11 +151,11 @@ cc.Class({
 
     notifyGameStart: function() {
         GLB.isRoomOwner = true;
-        var event = {
+        var msg = {
             action: GLB.GAME_START_EVENT,
             userIds: GLB.playerUserIds
         };
-        mvs.engine.sendEvent(JSON.stringify(event));
+        Game.GameManager.sendEventEx(msg);
     },
 
     onDestroy: function() {

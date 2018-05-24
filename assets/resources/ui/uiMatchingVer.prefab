@@ -953,7 +953,7 @@
     "sync": false
   },
   {
-    "__type__": "02e3dj/nzxHCJaAJKIIzjUn",
+    "__type__": "0ed973gS6lPR6SESc7jLFB6",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -962,7 +962,7 @@
     "_enabled": true,
     "showAnimation": 0,
     "hideAnimation": 0,
-    "isUseMask": true
+    "isUseMask": false
   },
   {
     "__type__": "cc.PrefabInfo",

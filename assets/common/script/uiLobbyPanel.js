@@ -22,7 +22,7 @@ cc.Class({
             if (GLB.MAX_PLAYER_COUNT > 1) {
                 if (cc.Canvas.instance.designResolution.height > cc.Canvas.instance.designResolution.width) {
                     uiFunc.openUI("uiMatchingVer", function(obj) {
-                        var matching = obj.getComponent("uiMatchingVer");
+                        var matching = obj.getComponent("uiMatching");
                         matching.joinRandomRoom();
                     });
                 } else {

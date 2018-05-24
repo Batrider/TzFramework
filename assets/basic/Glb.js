@@ -1,8 +1,6 @@
 var obj = {
     RANDOM_MATCH: 1,  // 随机匹配
     PROPERTY_MATCH: 2,  // 属性匹配
-    COOPERATION: 1,
-    COMPETITION: 2,
     MAX_PLAYER_COUNT: 3,
     PLAYER_COUNTS: [1, 2, 3],
     GAME_START_EVENT: "gameStart",
@@ -32,11 +30,5 @@ var obj = {
     roomId: 0,
     playertime: 180,
     isGameOver: false,
-
-    scoreMap: new Map(),
-
-    number1: "",
-    number2: "",
-    number3: "",
 };
 module.exports = obj;
