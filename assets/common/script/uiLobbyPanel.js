@@ -11,6 +11,8 @@ cc.Class({
         this.nodeDict["createRoom"].on("click", this.createRoom, this);
         this.nodeDict["joinRoom"].on("click", this.joinRoom, this);
         this.nodeDict["inviteFriend"].on("click", this.inviteFriend, this);
+
+        this.nodeDict["name"].getComponent(cc.Label).string = GLB.userInfo.id;
     },
 
     randomRoom: function() {
@@ -47,12 +49,12 @@ cc.Class({
                 }
             } else if (GLB.MAX_PLAYER_COUNT === 4) {
                 if (cc.Canvas.instance.designResolution.height > cc.Canvas.instance.designResolution.width) {
-                    uiFunc.openUI("uiMatching2v2", function(obj) {
+                    uiFunc.openUI("uiMatching2v2Ver", function(obj) {
                         var matching = obj.getComponent("uiMatching2v2Ver");
                         matching.joinRandomRoom();
                     });
                 } else {
-                    uiFunc.openUI("uiMatching2v2", function(obj) {
+                    uiFunc.openUI("uiMatching2v2Ver", function(obj) {
                         var matching = obj.getComponent("uiMatching2v2Ver");
                         matching.joinRandomRoom();
                     });
