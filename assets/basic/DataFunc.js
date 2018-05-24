@@ -17,14 +17,6 @@ window.dataFunc = {
     uiPanelAnimationClips: {}
 };
 
-// [Min,Max],可以取到最大值与最小值
-dataFunc.randomNum = function(Min, Max) {
-    var Range = Max - Min;
-    var Rand = Math.random();
-    var num = Min + Math.round(Rand * Range);
-    return num;
-};
-
 dataFunc.getTable = function(tableName) {
     return dataFunc.csvTables[tableName];
 };

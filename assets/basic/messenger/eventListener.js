@@ -17,7 +17,7 @@ oneToMultiListener.on = function(eventName, handler, target) {
         }
     }
 
-    handlerList.push({handler: handler, target: target});
+    handlerList.push({ handler: handler, target: target });
     return handlerList.length;
 };
 
@@ -29,17 +29,19 @@ oneToMultiListener.dispatch = function(eventName, data) {
 
     var len = handlerList.length;
     for (var i = 0; i < len; i++) {
-        var handler = handlerList[i].handler;
-        var target = handlerList[i].target;
-        if (handler) {
-            try {
-                if (target) {
-                    handler.call(target, data);
-                } else {
-                    handler(data);
+        if (handlerList[i]) {
+            var handler = handlerList[i].handler;
+            var target = handlerList[i].target;
+            if (handler) {
+                try {
+                    if (target) {
+                        handler.call(target, data);
+                    } else {
+                        handler(data);
+                    }
+                } catch (e) {
+                    console.error(e);
                 }
-            } catch (e) {
-                console.error(e);
             }
         }
     }

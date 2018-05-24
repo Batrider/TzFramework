@@ -1,18 +1,15 @@
 var obj = {
     RANDOM_MATCH: 1,  // 随机匹配
     PROPERTY_MATCH: 2,  // 属性匹配
-    MAX_PLAYER_COUNT: 2,
+    COOPERATION: 1,
+    COMPETITION: 2,
+    MAX_PLAYER_COUNT: 3,
+    PLAYER_COUNTS: [1, 2, 3],
     GAME_START_EVENT: "gameStart",
-    NEW_ITEM_EVENT: "newItem",
-    PLAYER_FLY_EVENT: "playerFly",
-    PLAYER_FIRE_EVENT: "playerFire",
+    NEW_START_EVENT: "newStar",
+    PLAYER_MOVE_EVENT: "playerMove",
+    GAIN_SCORE_EVENT: "gainScore",
     PLAYER_POSITION_EVENT: "playerPosition",
-    PLAYER_GET_ITEM_EVENT: "playerGetItem",
-    PLAYER_REMOVE_ITEM_EVENT: "playerRemoveItem",
-    PLAYER_HURT_EVENT: "playerHurt",
-    ROUND_START: "roundStart",
-    ROUND_OVER: "roundOver",
-    TIME_OVER: "timeOver",
 
     channel: 'MatchVS',
     platform: 'alpha',
@@ -22,6 +19,7 @@ var obj = {
     secret: 'da47754579fa47e4affab5785451622c',
 
     matchType: 1,
+    gameType: 1,
     tagsInfo: { "title": "A" },
     userInfo: null,
     playerUserIds: [],
@@ -29,13 +27,10 @@ var obj = {
     isRoomOwner: false,
     events: {},
 
-    syncFrame: true,
+    syncFrame: false,
     FRAME_RATE: 5,
     roomId: 0,
     playertime: 180,
-    first: null,
-    second: null,
-    third: null,
     isGameOver: false,
 
     scoreMap: new Map(),

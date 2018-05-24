@@ -53,6 +53,7 @@ uiFunc.openUI = function(uiName, callBack) {
             callBack(temp);
         }
         clientEvent.dispatch(clientEvent.eventType.openUI);
+        console.log("打开：" + uiName);
     });
 };
 
@@ -74,10 +75,11 @@ uiFunc.closeUI = function(uiName, callBack) {
             if (callBack) {
                 callBack();
             }
+            console.log("关闭：" + uiName);
             return;
         }
     }
-}
+};
 
 uiFunc.findUI = function(uiName) {
     for (var i = uiFunc.uiList.length - 1; i >= 0; i--) {

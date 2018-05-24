@@ -4,9 +4,19 @@ window.clientEvent = {
         closeUI: "closeUI",
         gameStart: "gameStart",
         gameOver: "gameOver",
-        roundOver: "roundOver",
-        roundStart: "roundStart",
-        playerDead: "playerDead"
+        initResponse: "initResponse",
+        errorResponse: "errorResponse",
+        joinRoomResponse: "joinRoomResponse",
+        joinRoomNotify: "joinRoomNotify",
+        leaveRoomResponse: "leaveRoomResponse",
+        leaveRoomNotify: "leaveRoomNotify",
+        joinOverResponse: "joinOverResponse",
+        createRoomResponse: "createRoomResponse",
+        getRoomListResponse: "getRoomListResponse",
+        getRoomDetailResponse: "getRoomDetailResponse",
+        getRoomListExResponse: "getRoomListExResponse",
+        kickPlayerResponse: "kickPlayerResponse",
+        kickPlayerNotify: "kickPlayerNotify"
     },
     eventListener: null
 }
