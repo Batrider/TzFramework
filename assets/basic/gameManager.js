@@ -27,7 +27,10 @@ cc.Class({
         mvs.response.getRoomListExResponse = this.getRoomListExResponse.bind(this);
         mvs.response.kickPlayerResponse = this.kickPlayerResponse.bind(this);
         mvs.response.kickPlayerNotify = this.kickPlayerNotify.bind(this);
-
+        mvs.response.registerUserResponse = this.registerUserResponse.bind(this);
+        mvs.response.loginResponse = this.loginResponse.bind(this); // 用户登录之后的回调
+        mvs.response.sendEventNotify = this.sendEventNotify.bind(this);
+        mvs.response.frameUpdate = this.frameUpdate.bind(this);
 
         var result = mvs.engine.init(mvs.response, GLB.channel, GLB.platform, GLB.gameId);
         if (result !== 0) {
@@ -118,12 +121,10 @@ cc.Class({
     errorResponse: function(error, msg) {
         console.log("错误信息：" + error);
         console.log("错误信息：" + msg);
-
     },
 
     initResponse: function() {
         console.log('初始化成功，开始注册用户');
-        mvs.response.registerUserResponse = this.registerUserResponse.bind(this); // 用户注册之后的回调
         var result = mvs.engine.registerUser();
         if (result !== 0) {
             console.log('注册用户失败，错误码:' + result);
@@ -139,7 +140,6 @@ cc.Class({
 
         console.log('开始登录,用户Id:' + userInfo.id)
 
-        mvs.response.loginResponse = this.loginResponse.bind(this); // 用户登录之后的回调
         var result = mvs.engine.login(
             userInfo.id, userInfo.token,
             GLB.gameId, GLB.gameVersion,
