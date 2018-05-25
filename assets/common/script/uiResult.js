@@ -1,4 +1,6 @@
 var uiPanel = require("uiPanel");
+var mvs = require("Matchvs");
+var GLB = require("Glb");
 cc.Class({
     extends: uiPanel,
 
@@ -11,9 +13,25 @@ cc.Class({
         this.player2.node.active = false;
         this.player3 = this.nodeDict["player3"].getComponent("resultPlayerIcon");
         this.player3.node.active = false;
+
     },
 
     setData: function() {
 
+    },
+
+
+    quit: function() {
+        mvs.engine.leaveRoom("");
+        var gamePanel = uiFunc.findUI("uiGamePanel");
+        if (gamePanel) {
+            uiFunc.closeUI("uiGamePanel");
+            gamePanel.destroy();
+        }
+        uiFunc.closeUI(this.node.name);
+        this.node.destroy();
+
+
+        Game.GameManager.lobbyShow();
     }
 });

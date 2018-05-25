@@ -140,10 +140,18 @@ cc.Class({
 
     notifyGameStart: function() {
         GLB.isRoomOwner = true;
-        var event = {
+        var msg = {
             action: GLB.GAME_START_EVENT,
             userIds: GLB.playerUserIds
         };
-        mvs.engine.sendEvent(JSON.stringify(event));
+        Game.GameManager.sendEventEx(msg);
     },
+
+    onDestroy() {
+        clientEvent.on(clientEvent.eventType.joinRoomResponse, this.joinRoomResponse, this);
+        clientEvent.on(clientEvent.eventType.joinRoomNotify, this.joinRoomNotify, this);
+        clientEvent.on(clientEvent.eventType.leaveRoomResponse, this.leaveRoomResponse, this);
+        clientEvent.on(clientEvent.eventType.leaveRoomNotify, this.leaveRoomNotify, this);
+        clientEvent.on(clientEvent.eventType.joinOverResponse, this.joinOverResponse, this);
+    }
 });

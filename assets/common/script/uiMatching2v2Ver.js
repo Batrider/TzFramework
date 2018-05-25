@@ -139,11 +139,11 @@ cc.Class({
 
     notifyGameStart: function() {
         GLB.isRoomOwner = true;
-        var event = {
+        var msg = {
             action: GLB.GAME_START_EVENT,
             userIds: GLB.playerUserIds
         };
-        mvs.engine.sendEvent(JSON.stringify(event));
+        Game.GameManager.sendEventEx(msg);
     },
 
     onDestroy() {

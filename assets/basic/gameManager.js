@@ -167,7 +167,7 @@ cc.Class({
             uiFunc.openUI("uiLobbyPanel");
         }
     },
-    
+
     sendEventNotify: function(info) {
         var cpProto = JSON.parse(info.cpProto);
         if (info.cpProto.indexOf(GLB.GAME_START_EVENT) >= 0) {
