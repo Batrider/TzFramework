@@ -166,5 +166,44 @@ cc.Class({
         } else {
             uiFunc.openUI("uiLobbyPanel");
         }
+    },
+    
+    sendEventNotify: function(info) {
+        var cpProto = JSON.parse(info.cpProto);
+        if (info.cpProto.indexOf(GLB.GAME_START_EVENT) >= 0) {
+            GLB.playerUserIds = [GLB.userInfo.id]
+            var remoteUserIds = JSON.parse(info.cpProto).userIds;
+            remoteUserIds.forEach(function(id) {
+                if (GLB.userInfo.id !== id) {
+                    GLB.playerUserIds.push(id);
+                }
+            });
+            this.startGame();
+        }
+
+
+        if (info.cpProto.indexOf(GLB.PLAYER_HIT) >= 0) {
+            if (info.srcUserId !== GLB.userInfo.id) {
+                // Game.PlayerManager.rival.PLAYER_HIT();
+            }
+        }
+
+        if (info.cpProto.indexOf(GLB.GAME_OVER_EVENT) >= 0) {
+            clientEvent.dispatch(clientEvent.eventType.gameOver);
+        }
+    },
+
+    sendEventEx: function(msg) {
+        var result = mvs.engine.sendEventEx(0, JSON.stringify(msg), 0, GLB.playerUserIds);
+        if (result.result !== 0) {
+            console.log(msg.action, result.result);
+        }
+    },
+
+    sendEvent: function(msg) {
+        var result = mvs.engine.sendEvent(JSON.stringify(msg));
+        if (result.result !== 0) {
+            console.log(msg.action, result.result);
+        }
     }
 });
