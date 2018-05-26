@@ -11,10 +11,11 @@ cc.Class({
         this._super();
         this.nodeDict["quit"].on("click", this.leaveRoom, this);
 
-        mvs.response.joinRoomResponse = this.joinRoomResponse.bind(this);
-        mvs.response.joinRoomNotify = this.joinRoomNotify.bind(this);
-        mvs.response.leaveRoomResponse = this.leaveRoomResponse.bind(this);
-        mvs.response.leaveRoomNotify = this.leaveRoomNotify.bind(this);
+        clientEvent.on(clientEvent.eventType.joinRoomResponse, this.joinRoomResponse, this);
+        clientEvent.on(clientEvent.eventType.joinRoomNotify, this.joinRoomNotify, this);
+        clientEvent.on(clientEvent.eventType.leaveRoomResponse, this.leaveRoomResponse, this);
+        clientEvent.on(clientEvent.eventType.leaveRoomNotify, this.leaveRoomNotify, this);
+        clientEvent.on(clientEvent.eventType.joinOverResponse, this.joinOverResponse, this);
     },
 
     joinRandomRoom: function() {
@@ -128,7 +129,6 @@ cc.Class({
         }
     },
 
-
     joinOverResponse: function(data) {
         if (data.joinOverRsp.status === 200) {
             console.log("关闭房间成功");
@@ -148,10 +148,10 @@ cc.Class({
     },
 
     onDestroy() {
-        clientEvent.on(clientEvent.eventType.joinRoomResponse, this.joinRoomResponse, this);
-        clientEvent.on(clientEvent.eventType.joinRoomNotify, this.joinRoomNotify, this);
-        clientEvent.on(clientEvent.eventType.leaveRoomResponse, this.leaveRoomResponse, this);
-        clientEvent.on(clientEvent.eventType.leaveRoomNotify, this.leaveRoomNotify, this);
-        clientEvent.on(clientEvent.eventType.joinOverResponse, this.joinOverResponse, this);
+        clientEvent.off(clientEvent.eventType.joinRoomResponse, this.joinRoomResponse, this);
+        clientEvent.off(clientEvent.eventType.joinRoomNotify, this.joinRoomNotify, this);
+        clientEvent.off(clientEvent.eventType.leaveRoomResponse, this.leaveRoomResponse, this);
+        clientEvent.off(clientEvent.eventType.leaveRoomNotify, this.leaveRoomNotify, this);
+        clientEvent.off(clientEvent.eventType.joinOverResponse, this.joinOverResponse, this);
     }
 });

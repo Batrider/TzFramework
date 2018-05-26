@@ -30,7 +30,7 @@ cc.Class({
         mvs.response.registerUserResponse = this.registerUserResponse.bind(this);
         mvs.response.loginResponse = this.loginResponse.bind(this); // 用户登录之后的回调
         mvs.response.sendEventNotify = this.sendEventNotify.bind(this);
-        mvs.response.frameUpdate = this.frameUpdate.bind(this);
+        // mvs.response.frameUpdate = this.frameUpdate.bind(this);
 
         var result = mvs.engine.init(mvs.response, GLB.channel, GLB.platform, GLB.gameId);
         if (result !== 0) {

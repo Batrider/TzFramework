@@ -20,15 +20,15 @@ cc.Class({
         clientEvent.on(clientEvent.eventType.joinRoomResponse, this.joinRoomResponse, this);
         clientEvent.on(clientEvent.eventType.getRoomListExResponse, this.getRoomListExResponse, this);
 
-        // var roomFilter = new mvs.RoomFilter();
-        // roomFilter.maxPlayer = GLB.MAX_PLAYER_COUNT;
-        // roomFilter.mode = 0;
-        // roomFilter.canWatch = 0;
-        // roomFilter.roomProperty = "";
-        // mvs.engine.getRoomList(roomFilter);
+        this.getRoomList();
+        this.roomRqId = setInterval(function() {
+            this.getRoomList();
+        }.bind(this), 5000);
+    },
 
+    getRoomList: function() {
         var filter = {
-            maxPlayer: GLB.MAX_PLAYER_COUNT,
+            maxPlayer: 0,
             mode: 0,
             canWatch: 0,
             roomProperty: "",
@@ -39,10 +39,11 @@ cc.Class({
             pageNo: 0,
             pageSize: 20
         }
+        // for (var i = 0; i < GLB.PLAYER_COUNTS.length; i++) {
+        //     filter.maxPlayer = GLB.PLAYER_COUNTS[i];
+        //
+        // }
         mvs.engine.getRoomListEx(filter);
-        this.roomRqId = setInterval(function() {
-            mvs.engine.getRoomListEx(filter);
-        }, 5000);
     },
 
     getRoomListResponse: function(data) {
