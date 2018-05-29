@@ -9,6 +9,7 @@ cc.Class({
     onLoad () {
         this.animation = this.node.getComponent(cc.Animation);
         this.animation.on("finished", this.animFinished.bind(this));
+        this.animation.on("pause", this.animFinished.bind(this));
     },
     init () {
         this.animation.play();

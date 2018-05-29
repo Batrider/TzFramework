@@ -15,9 +15,9 @@ cc.Class({
         clientEvent.on(clientEvent.eventType.correctEvent, this.correctEvent.bind(this));
         clientEvent.on(clientEvent.eventType.mistakeEvent, this.mistakeEvent.bind(this));
         clientEvent.on(clientEvent.eventType.gameOver, this.gameOver.bind(this));
-        uiFunc.openUI("uiVictoryPanel", function(panel) {
-            panel.getComponent("uiVictoryPanel").init();
-        }.bind(this));
+        // uiFunc.openUI("uiVictoryPanel", function(panel) {
+        //     panel.getComponent("uiVictoryPanel").init();
+        // }.bind(this));
     },
     countDown () {
         uiFunc.openUI("uiGameStartPanel", function(panel) {

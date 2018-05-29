@@ -19,7 +19,7 @@ cc.Class({
     },
     animFinished () {
         setTimeout(function() {
-            uiFunc.closeUI("uiRigntEffectPanel");
+            uiFunc.closeUI("uiRightEffectPanel");
         }.bind(this), 300);
     },
 
