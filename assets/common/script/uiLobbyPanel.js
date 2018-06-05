@@ -1,6 +1,5 @@
 var uiPanel = require("uiPanel");
 var mvs = require("Matchvs");
-var GLB = require("Glb");
 cc.Class({
     extends: uiPanel,
 
@@ -11,8 +10,6 @@ cc.Class({
         this.nodeDict["createRoom"].on("click", this.createRoom, this);
         this.nodeDict["joinRoom"].on("click", this.joinRoom, this);
         this.nodeDict["inviteFriend"].on("click", this.inviteFriend, this);
-
-        this.nodeDict["name"].getComponent(cc.Label).string = GLB.userInfo.id;
     },
 
     randomRoom: function() {
@@ -22,7 +19,7 @@ cc.Class({
             if (GLB.MAX_PLAYER_COUNT > 1) {
                 if (cc.Canvas.instance.designResolution.height > cc.Canvas.instance.designResolution.width) {
                     uiFunc.openUI("uiMatchingVer", function(obj) {
-                        var matching = obj.getComponent("uiMatching");
+                        var matching = obj.getComponent("uiMatchingVer");
                         matching.joinRandomRoom();
                     });
                 } else {
@@ -49,12 +46,12 @@ cc.Class({
                 }
             } else if (GLB.MAX_PLAYER_COUNT === 4) {
                 if (cc.Canvas.instance.designResolution.height > cc.Canvas.instance.designResolution.width) {
-                    uiFunc.openUI("uiMatching2v2Ver", function(obj) {
+                    uiFunc.openUI("uiMatching2v2", function(obj) {
                         var matching = obj.getComponent("uiMatching2v2Ver");
                         matching.joinRandomRoom();
                     });
                 } else {
-                    uiFunc.openUI("uiMatching2v2Ver", function(obj) {
+                    uiFunc.openUI("uiMatching2v2", function(obj) {
                         var matching = obj.getComponent("uiMatching2v2Ver");
                         matching.joinRandomRoom();
                     });

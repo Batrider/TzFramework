@@ -1,6 +1,5 @@
 var uiPanel = require("uiPanel");
 var mvs = require("Matchvs");
-var GLB = require("Glb");
 cc.Class({
     extends: uiPanel,
     properties: {
@@ -122,8 +121,7 @@ cc.Class({
                     break;
                 }
             }
-            uiFunc.closeUI(this.node.name);
-            this.node.destroy();
+            uiFunc.closeUI(this.node);
         } else {
             console.log("离开房间失败");
         }
@@ -140,11 +138,11 @@ cc.Class({
 
     notifyGameStart: function() {
         GLB.isRoomOwner = true;
-        var msg = {
+        var event = {
             action: GLB.GAME_START_EVENT,
             userIds: GLB.playerUserIds
         };
-        Game.GameManager.sendEventEx(msg);
+        mvs.engine.sendEvent(JSON.stringify(event));
     },
 
     onDestroy() {

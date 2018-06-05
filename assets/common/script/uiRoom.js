@@ -1,6 +1,5 @@
 var uiPanel = require("uiPanel");
 var mvs = require("Matchvs");
-var GLB = require("Glb");
 cc.Class({
     extends: uiPanel,
     properties: {},
@@ -43,8 +42,7 @@ cc.Class({
         }
         if (GLB.userInfo.id === data.kickPlayerRsp.userID) {
             GLB.isRoomOwner = false;
-            uiFunc.closeUI(this.node.name);
-            this.node.destroy();
+            uiFunc.closeUI(this.node);
         }
     },
 
@@ -58,8 +56,7 @@ cc.Class({
 
         if (GLB.userInfo.id === data.kickPlayerNotify.userId) {
             GLB.isRoomOwner = false;
-            uiFunc.closeUI(this.node.name);
-            this.node.destroy();
+            uiFunc.closeUI(this.node);
         }
     },
 
@@ -79,8 +76,7 @@ cc.Class({
             console.log("离开房间失败");
         }
         GLB.isRoomOwner = false;
-        uiFunc.closeUI(this.node.name);
-        this.node.destroy();
+        uiFunc.closeUI(this.node);
     },
 
     leaveRoomNotify: function(data) {
@@ -131,11 +127,11 @@ cc.Class({
 
             GLB.playerUserIds = userIds;
 
-            var msg = {
+            var event = {
                 action: GLB.GAME_START_EVENT,
                 userIds: userIds
             };
-            Game.GameManager.sendEventEx(msg);
+            mvs.engine.sendEvent(JSON.stringify(event));
         }
     },
 

@@ -5,34 +5,10 @@
  */
 
 window.uiFunc = {
-    uiList: [],
-    cacheUIList: []
+    uiList: []
 };
 
 uiFunc.openUI = function(uiName, callBack) {
-    // 缓存--
-    for (var i = 0; i < uiFunc.cacheUIList.length; i++) {
-        var temp = uiFunc.cacheUIList[i];
-        if (temp && temp.name === uiName) {
-            temp.active = true;
-            temp.parent = cc.Canvas.instance.node;
-            uiFunc.uiList.push(temp)
-            uiFunc.cacheUIList.splice(i, 1);
-
-            var panel = temp.getComponent("uiPanel");
-            if (panel) {
-                panel.show();
-            }
-
-            // event--
-            if (callBack) {
-                callBack(temp);
-            }
-            clientEvent.dispatch(clientEvent.eventType.openUI);
-            return;
-        }
-    }
-    // 非缓存--
     cc.loader.loadRes('ui/' + uiName, function(err, prefab) {
         if (err) {
             cc.error(err.message || err);
@@ -41,42 +17,29 @@ uiFunc.openUI = function(uiName, callBack) {
 
         var temp = cc.instantiate(prefab);
         temp.parent = cc.Canvas.instance.node;
-        uiFunc.uiList.push(temp)
+        uiFunc.uiList.push(temp);
 
-        var panel = temp.getComponent("uiPanel");
-        if (panel) {
-            panel.show();
+        for (var i = 0; i < uiFunc.uiList.length; i++) {
+            if (uiFunc.uiList[i]) {
+                var targetUI = uiFunc.uiList[i].getComponent("uiPanel");
+                if (targetUI && targetUI.isTop) {
+                    targetUI.node.setSiblingIndex(Number.MAX_SAFE_INTEGER);
+                }
+            }
         }
-
         // event--
         if (callBack) {
             callBack(temp);
         }
-        clientEvent.dispatch(clientEvent.eventType.openUI);
-        console.log("打开：" + uiName);
     });
 };
 
-uiFunc.closeUI = function(uiName, callBack) {
+uiFunc.closeUI = function(targetUI) {
     for (var i = uiFunc.uiList.length - 1; i >= 0; i--) {
-        var temp = uiFunc.uiList[i];
-        if (temp && temp.name === uiName) {
-            temp.active = false;
-            temp.removeFromParent(true);
-            uiFunc.cacheUIList.push(temp);
+        if (uiFunc.uiList[i] && targetUI === uiFunc.uiList[i]) {
+            targetUI.destroy();
             uiFunc.uiList.splice(i, 1);
-
-            var panel = temp.getComponent("uiPanel");
-            if (panel) {
-                panel.hide();
-            }
-
-            clientEvent.dispatch(clientEvent.eventType.closeUI);
-            if (callBack) {
-                callBack();
-            }
-            console.log("关闭：" + uiName);
-            return;
+            break;
         }
     }
 };
@@ -88,4 +51,5 @@ uiFunc.findUI = function(uiName) {
             return temp;
         }
     }
+    return null;
 }

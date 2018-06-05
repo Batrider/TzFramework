@@ -1,16 +1,40 @@
 var mvs = require("Matchvs");
-var GLB = require("Glb");
-
 cc.Class({
     extends: cc.Component,
     onLoad() {
         Game.GameManager = this;
-        cc.director.getCollisionManager().enabled = true;
+        cc.game.addPersistRootNode(this.node);
         clientEvent.init();
         dataFunc.loadConfigs();
-        this.matchVsInit();
-        uiFunc.openUI("uiMaskLayout", function() {
-        });
+        clientEvent.on(clientEvent.eventType.gameOver, this.gameOver, this);
+        clientEvent.on(clientEvent.eventType.leaveRoomNotify, this.leaveRoom, this);
+    },
+
+    leaveRoom: function(data) {
+        // 离开房间--
+        if (this.gameState === GameState.Play) {
+            if (GLB.userInfo.id !== data.leaveRoomInfo.userId) {
+                GLB.isRoomOwner = true;
+            }
+            else {
+                Game.GameManager.gameState = GameState.Over;
+            }
+        }
+    },
+
+    gameOver: function() {
+        console.log("游戏结束");
+        if (Game.GameManager.gameState !== GameState.Over) {
+            Game.GameManager.gameState = GameState.Over;
+            clientEvent.dispatch(clientEvent.eventType.gameOver);
+            setTimeout(function() {
+                if (cc.Canvas.instance.designResolution.height > cc.Canvas.instance.designResolution.width) {
+                    uiFunc.openUI("uiVsResultVer");
+                } else {
+                    uiFunc.openUI("uiVsResult");
+                }
+            }.bind(this), 1500);
+        }
     },
 
     matchVsInit: function() {
@@ -29,8 +53,8 @@ cc.Class({
         mvs.response.kickPlayerNotify = this.kickPlayerNotify.bind(this);
         mvs.response.registerUserResponse = this.registerUserResponse.bind(this);
         mvs.response.loginResponse = this.loginResponse.bind(this); // 用户登录之后的回调
+        mvs.response.logoutResponse = this.logoutResponse.bind(this); // 用户登录之后的回调
         mvs.response.sendEventNotify = this.sendEventNotify.bind(this);
-        // mvs.response.frameUpdate = this.frameUpdate.bind(this);
 
         var result = mvs.engine.init(mvs.response, GLB.channel, GLB.platform, GLB.gameId);
         if (result !== 0) {
@@ -46,6 +70,10 @@ cc.Class({
     },
 
     kickPlayerResponse: function(kickPlayerRsp) {
+        if (kickPlayerRsp.status !== 200) {
+            console.log("失败kickPlayerRsp:" + kickPlayerRsp);
+            return;
+        }
         var data = {
             kickPlayerRsp: kickPlayerRsp
         }
@@ -53,6 +81,10 @@ cc.Class({
     },
 
     getRoomListExResponse: function(rsp) {
+        if (rsp.status !== 200) {
+            console.log("失败 rsp:" + rsp);
+            return;
+        }
         var data = {
             rsp: rsp
         }
@@ -60,6 +92,10 @@ cc.Class({
     },
 
     getRoomDetailResponse: function(rsp) {
+        if (rsp.status !== 200) {
+            console.log("失败 rsp:" + rsp);
+            return;
+        }
         var data = {
             rsp: rsp
         }
@@ -67,6 +103,10 @@ cc.Class({
     },
 
     getRoomListResponse: function(status, roomInfos) {
+        if (status !== 200) {
+            console.log("失败 status:" + status);
+            return;
+        }
         var data = {
             status: status,
             roomInfos: roomInfos
@@ -75,6 +115,10 @@ cc.Class({
     },
 
     createRoomResponse: function(rsp) {
+        if (rsp.status !== 200) {
+            console.log("失败 createRoomResponse:" + rsp);
+            return;
+        }
         var data = {
             rsp: rsp
         }
@@ -82,6 +126,10 @@ cc.Class({
     },
 
     joinOverResponse: function(joinOverRsp) {
+        if (joinOverRsp.status !== 200) {
+            console.log("失败 joinOverRsp:" + joinOverRsp);
+            return;
+        }
         var data = {
             joinOverRsp: joinOverRsp
         }
@@ -89,6 +137,10 @@ cc.Class({
     },
 
     joinRoomResponse: function(status, roomUserInfoList, roomInfo) {
+        if (status !== 200) {
+            console.log("失败 joinRoomResponse:" + status);
+            return;
+        }
         var data = {
             status: status,
             roomUserInfoList: roomUserInfoList,
@@ -105,6 +157,10 @@ cc.Class({
     },
 
     leaveRoomResponse: function(leaveRoomRsp) {
+        if (leaveRoomRsp.status !== 200) {
+            console.log("失败 leaveRoomRsp:" + leaveRoomRsp);
+            return;
+        }
         var data = {
             leaveRoomRsp: leaveRoomRsp
         }
@@ -118,7 +174,25 @@ cc.Class({
         clientEvent.dispatch(clientEvent.eventType.leaveRoomNotify, data);
     },
 
+    logoutResponse: function(status) {
+        cc.game.removePersistRootNode(this.node);
+        cc.director.loadScene('lobby');
+    },
+
     errorResponse: function(error, msg) {
+        if (error === 1001) {
+            uiFunc.openUI("uiTip", function(obj) {
+                var uiTip = obj.getComponent("uiTip");
+                if (uiTip) {
+                    uiTip.setData("网络断开连接");
+                }
+            });
+            setTimeout(function() {
+                mvs.engine.logout("");
+                cc.game.removePersistRootNode(this.node);
+                cc.director.loadScene('lobby');
+            }.bind(this), 2500);
+        }
         console.log("错误信息：" + error);
         console.log("错误信息：" + msg);
     },
@@ -161,6 +235,7 @@ cc.Class({
     },
 
     lobbyShow: function() {
+        this.gameState = GameState.None;
         if (cc.Canvas.instance.designResolution.height > cc.Canvas.instance.designResolution.width) {
             uiFunc.openUI("uiLobbyPanelVer");
         } else {
@@ -168,7 +243,9 @@ cc.Class({
         }
     },
 
+    // 收到的消息
     sendEventNotify: function(info) {
+        console.log(info)
         var cpProto = JSON.parse(info.cpProto);
         if (info.cpProto.indexOf(GLB.GAME_START_EVENT) >= 0) {
             GLB.playerUserIds = [GLB.userInfo.id]
@@ -183,14 +260,79 @@ cc.Class({
 
 
         if (info.cpProto.indexOf(GLB.PLAYER_HIT) >= 0) {
-            if (info.srcUserId !== GLB.userInfo.id) {
-                // Game.PlayerManager.rival.PLAYER_HIT();
+            var param = {
+                ID: (info.srcUserId == GLB.userInfo.id) ? 0 : 1
+            }
+            clientEvent.dispatch(clientEvent.eventType.hitEvent, param);
+            // Game.PlayerManager.rival.PLAYER_HIT();
+            if (info.srcUserId == GLB.userInfo.id) {
+                clientEvent.dispatch(clientEvent.eventType.showBlueAddNum);
+            } else {
+                clientEvent.dispatch(clientEvent.eventType.showAddRedNum);
+            }
+
+        }
+        if (info.cpProto.indexOf(GLB.STAND_UP) >= 0) {
+            var param = {
+                ID: (info.srcUserId == GLB.userInfo.id) ? 0 : 1
+            }
+            clientEvent.dispatch(clientEvent.eventType.standUpEvent, param);
+
+        }
+        if (info.cpProto.indexOf(GLB.COMPLACENT) >= 0) {
+            var param = {
+                ID: (info.srcUserId == GLB.userInfo.id) ? 0 : 1
+            }
+            clientEvent.dispatch(clientEvent.eventType.complacentEvent, param);
+            if (info.srcUserId == GLB.userInfo.id) {
+                clientEvent.dispatch(clientEvent.eventType.showReduceRedNum);
+            } else {
+                clientEvent.dispatch(clientEvent.eventType.showReduceBlueNum);
+            }
+        }
+        if (info.cpProto.indexOf(GLB.SIT_DOWN) >= 0) {
+            clientEvent.dispatch(clientEvent.eventType.sitDown);
+        }
+        if (info.cpProto.indexOf(GLB.GAME_OVER_EVENT) >= 0) {
+            this.gameOver();
+        }
+        if (info.cpProto.indexOf(GLB.APPEAR_BESOM) >= 0) {
+            clientEvent.dispatch(clientEvent.eventType.appearBesom);
+
+        }
+        if (info.cpProto.indexOf(GLB.APPEAR_BROTHER) >= 0) {
+            clientEvent.dispatch(clientEvent.eventType.appearBrother);
+        }
+        if (info.cpProto.indexOf(GLB.APPEAR_TEACHER) >= 0) {
+            clientEvent.dispatch(clientEvent.eventType.appearTeacher);
+        }
+        if (info.cpProto.indexOf(GLB.HALF_OPEN_DOOR) >= 0) {
+            clientEvent.dispatch(clientEvent.eventType.halfOpenDoor);
+        }
+
+        if (info.cpProto.indexOf(GLB.READY) >= 0) {
+            this.readyCnt++;
+            if (GLB.isRoomOwner && this.readyCnt >= GLB.playerUserIds.length) {
+                this.sendRoundStartMsg();
             }
         }
 
-        if (info.cpProto.indexOf(GLB.GAME_OVER_EVENT) >= 0) {
-            clientEvent.dispatch(clientEvent.eventType.gameOver);
+        if (info.cpProto.indexOf(GLB.ROUND_START) >= 0) {
+            setTimeout(function() {
+                Game.GameManager.gameState = GameState.Play;
+            }.bind(this), 2000);
+            clientEvent.dispatch(clientEvent.eventType.roundStart);
         }
+    },
+
+    sendReadyMsg: function() {
+        var msg = { action: GLB.READY };
+        this.sendEventEx(msg);
+    },
+
+    sendRoundStartMsg: function() {
+        var msg = { action: GLB.ROUND_START };
+        this.sendEventEx(msg);
     },
 
     sendEventEx: function(msg) {
@@ -205,5 +347,19 @@ cc.Class({
         if (result.result !== 0) {
             console.log(msg.action, result.result);
         }
+    },
+
+    startGame: function() {
+        this.readyCnt = 0;
+        cc.director.loadScene('game', function() {
+            uiFunc.openUI("uiGamePanel", function() {
+                this.sendReadyMsg();
+            }.bind(this));
+        }.bind(this));
+    },
+
+    onDestroy() {
+        clientEvent.off(clientEvent.eventType.gameOver, this.gameOver, this);
+        clientEvent.off(clientEvent.eventType.leaveRoomNotify, this.leaveRoom, this);
     }
 });

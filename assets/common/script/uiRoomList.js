@@ -1,6 +1,5 @@
 var uiPanel = require("uiPanel");
 var mvs = require("Matchvs");
-var GLB = require("Glb");
 cc.Class({
     extends: uiPanel,
 
@@ -32,17 +31,13 @@ cc.Class({
             mode: 0,
             canWatch: 0,
             roomProperty: "",
-            full: 0,
-            state: 0,
+            full: 2,
+            state: 1,
             sort: 1,
             order: 0,
             pageNo: 0,
             pageSize: 20
         }
-        // for (var i = 0; i < GLB.PLAYER_COUNTS.length; i++) {
-        //     filter.maxPlayer = GLB.PLAYER_COUNTS[i];
-        //
-        // }
         mvs.engine.getRoomListEx(filter);
     },
 
@@ -84,8 +79,7 @@ cc.Class({
 
     quit: function() {
         clearInterval(this.roomRqId);
-        uiFunc.closeUI(this.node.name);
-        this.node.destroy();
+        uiFunc.closeUI(this.node);
     },
 
     search: function() {
@@ -130,15 +124,13 @@ cc.Class({
                 uiFunc.openUI("uiRoomVer", function(obj) {
                     var room = obj.getComponent('uiRoom');
                     room.joinRoomInit(data.roomUserInfoList, data.roomInfo);
-                    uiFunc.closeUI(this.node.name);
-                    this.node.destroy();
+                    uiFunc.closeUI(this.node);
                 }.bind(this));
             } else {
                 uiFunc.openUI("uiRoom", function(obj) {
                     var room = obj.getComponent('uiRoom');
                     room.joinRoomInit(data.roomUserInfoList, data.roomInfo);
-                    uiFunc.closeUI(this.node.name);
-                    this.node.destroy();
+                    uiFunc.closeUI(this.node);
                 }.bind(this));
             }
         }
@@ -147,5 +139,6 @@ cc.Class({
     onDestroy() {
         clientEvent.off(clientEvent.eventType.getRoomListResponse, this.getRoomListResponse, this);
         clientEvent.off(clientEvent.eventType.joinRoomResponse, this.joinRoomResponse, this);
+        clientEvent.off(clientEvent.eventType.getRoomListExResponse, this.getRoomListExResponse, this);
     }
 });

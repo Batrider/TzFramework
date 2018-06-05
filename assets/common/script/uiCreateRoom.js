@@ -1,6 +1,5 @@
 var uiPanel = require("uiPanel");
 var mvs = require("Matchvs");
-var GLB = require("Glb");
 cc.Class({
     extends: uiPanel,
     properties: {},
@@ -9,7 +8,6 @@ cc.Class({
         this._super();
         this.playerCntLb = this.nodeDict["playerCnt"].getComponent(cc.Label);
         this.playerCnt = GLB.PLAYER_COUNTS[0];
-        this.playerCntLb.string = this.playerCnt;
         this.nodeDict["quit"].on("click", this.quit, this);
         this.nodeDict["addNode"].on("click", this.addPlayerCount, this);
         this.nodeDict["subNode"].on("click", this.subPlayerCount, this);
@@ -44,8 +42,7 @@ cc.Class({
     },
 
     quit: function() {
-        uiFunc.closeUI(this.node.name);
-        this.node.destroy();
+        uiFunc.closeUI(this.node);
     },
 
     createRoom: function() {
@@ -76,15 +73,13 @@ cc.Class({
                 uiFunc.openUI("uiRoomVer", function(obj) {
                     var room = obj.getComponent('uiRoom');
                     room.createRoomInit(data.rsp);
-                    uiFunc.closeUI(this.node.name);
-                    this.node.destroy();
+                    uiFunc.closeUI(this.node);
                 }.bind(this));
             } else {
                 uiFunc.openUI("uiRoom", function(obj) {
                     var room = obj.getComponent('uiRoom');
                     room.createRoomInit(data.rsp);
-                    uiFunc.closeUI(this.node.name);
-                    this.node.destroy();
+                    uiFunc.closeUI(this.node);
                 }.bind(this));
             }
         }

@@ -1,6 +1,5 @@
 var uiPanel = require("uiPanel");
 var mvs = require("Matchvs");
-var GLB = require("Glb");
 cc.Class({
     extends: uiPanel,
     properties: {
@@ -46,6 +45,7 @@ cc.Class({
     joinRoomResponse: function(data) {
         if (data.status !== 200) {
             console.log('进入房间失败,异步回调错误码: ' + data.status);
+            return;
         } else {
             console.log('进入房间成功');
             console.log('房间号: ' + data.roomInfo.roomID);

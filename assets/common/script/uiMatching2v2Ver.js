@@ -1,6 +1,5 @@
 var uiPanel = require("uiPanel");
 var mvs = require("Matchvs");
-var GLB = require("Glb");
 cc.Class({
     extends: uiPanel,
     properties: {
@@ -11,10 +10,11 @@ cc.Class({
         this._super();
         this.nodeDict["quit"].on("click", this.leaveRoom, this);
 
-        mvs.response.joinRoomResponse = this.joinRoomResponse.bind(this);
-        mvs.response.joinRoomNotify = this.joinRoomNotify.bind(this);
-        mvs.response.leaveRoomResponse = this.leaveRoomResponse.bind(this);
-        mvs.response.leaveRoomNotify = this.leaveRoomNotify.bind(this);
+        clientEvent.on(clientEvent.eventType.joinRoomResponse, this.joinRoomResponse, this);
+        clientEvent.on(clientEvent.eventType.joinRoomNotify, this.joinRoomNotify, this);
+        clientEvent.on(clientEvent.eventType.leaveRoomResponse, this.leaveRoomResponse, this);
+        clientEvent.on(clientEvent.eventType.leaveRoomNotify, this.leaveRoomNotify, this);
+        clientEvent.on(clientEvent.eventType.joinOverResponse, this.joinOverResponse, this);
     },
 
     joinRandomRoom: function() {
@@ -45,6 +45,7 @@ cc.Class({
     joinRoomResponse: function(data) {
         if (data.status !== 200) {
             console.log('进入房间失败,异步回调错误码: ' + data.status);
+            return;
         } else {
             console.log('进入房间成功');
             console.log('房间号: ' + data.roomInfo.roomID);
