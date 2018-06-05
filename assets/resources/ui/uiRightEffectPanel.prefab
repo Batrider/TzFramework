@@ -10,7 +10,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "uiRigntEffectPanel",
+    "_name": "uiRightEffectPanel",
     "_objFlags": 0,
     "_parent": null,
     "_children": [
@@ -640,7 +640,7 @@
     "hideAnimation": 0,
     "isUseMask": false,
     "rigntAudio": {
-      "__uuid__": "38e170a3-b1b2-4263-a555-43d314407a0f"
+      "__uuid__": "1560e338-4322-4d11-9fd3-5f53bf6a94f3"
     }
   },
   {

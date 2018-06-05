@@ -15,7 +15,7 @@ cc.Class({
     },
     init () {
         this.animation.play();
-        cc.audioEngine.play(this.rigntAudio);
+        cc.audioEngine.play(this.rigntAudio, false, .3);
     },
     animFinished () {
         setTimeout(function() {
